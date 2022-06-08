@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the nf-core/gmsmetapost pipeline
+description: Suggest an idea for the gmsmetapost pipeline
 labels: enhancement
 body:
   - type: textarea
