@@ -12,33 +12,31 @@ workflow INPUT_CHECK {
     SAMPLESHEET_CHECK ( samplesheet )
         .csv
         .splitCsv ( header:true, sep:',' )
-        .map { create_fastq_channel(it) }
-        .set { reads }
+        .map { create_tsv_channel(it) }
+        .set { hits }
 
     emit:
-    reads                                     // channel: [ val(meta), [ reads ] ]
+    hits                                     // channel: [ val(meta), [ hits ] ]
     versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
 }
 
-// Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
-def create_fastq_channel(LinkedHashMap row) {
+// Function to get list of [ meta, [ kraken2, centrifuge ] ]
+def create_tsv_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
     meta.id         = row.sample
-    meta.single_end = row.single_end.toBoolean()
 
-    // add path(s) of the fastq file(s) to the meta map
-    def fastq_meta = []
-    if (!file(row.fastq_1).exists()) {
-        exit 1, "ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}"
+def array = []
+    if (!file(row.kraken2).exists()) {
+        exit 1, "ERROR: Please check input samplesheet -> kraken2 classification file does not exist!\n${row.kraken2}"
     }
-    if (meta.single_end) {
-        fastq_meta = [ meta, [ file(row.fastq_1) ] ]
-    } else {
-        if (!file(row.fastq_2).exists()) {
-            exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
-        }
-        fastq_meta = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
+    if (!file(row.centrifuge).exists()) {
+        exit 1, "ERROR: Please check input samplesheet -> centrifuge classification file does not exist!\n${row.centrifuge}"
     }
-    return fastq_meta
+    array = [ meta,
+        file(row.kraken2), file(row.centrifuge)
+    ]
+    return array
+
+
 }

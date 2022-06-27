@@ -1,3 +1,4 @@
-sample,fastq_1,fastq_2
-SAMPLE_PAIRED_END,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz
-SAMPLE_SINGLE_END,/path/to/fastq/files/AEG588A4_S4_L003_R1_001.fastq.gz,
+sample,kraken2,centrifuge
+sample1,tsvs/sample1_kraken2.report.tsv,tsvs/sample1_centrifuge.report.tsv
+sample2,tsvs/kraken2.report.tsv,tsvs/sample2_centrifuge.report.tsv
+sample3,tsvs/sample3_kraken2.report.tsv tsvs/sample3_centrifuge.report.tsv
