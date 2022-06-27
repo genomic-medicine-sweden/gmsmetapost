@@ -84,7 +84,7 @@ class RowChecker:
         self._validate_tsv_format(row[self._second_col])
         self._validate_tsv_file_exists(row[self._second_col])
 
-    def _validate_tsv_format(self, filename) -> None:
+    def _validate_tsv_format(self, filename: str) -> None:
         """Assert that a given filename has the expected tsv extensions."""
         assert any(filename.endswith(extension) for extension in self.VALID_FORMATS), (
             f"The tsv file has an unrecognized extension: {filename}\n"
