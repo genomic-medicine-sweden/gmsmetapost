@@ -21,7 +21,7 @@ class RowChecker:
 
     """
 
-    VALID_FORMATS = (".tsv",)
+    VALID_FORMATS = (".tsv", )
 
     def __init__(
         self,
@@ -61,9 +61,8 @@ class RowChecker:
         self._validate_sample(row)
         self._validate_first(row)
         self._validate_second(row)
-        self._seen.add(
-            (row[self._sample_col], row[self._first_col], row[self._second_col])
-        )
+        self._seen.add((row[self._sample_col], row[self._first_col],
+                        row[self._second_col]))
         self.modified.append(row)
 
     def _validate_sample(self, row: dict) -> None:
@@ -74,26 +73,30 @@ class RowChecker:
 
     def _validate_first(self, row: dict) -> None:
         """Assert that the first tsv entry is non-empty and has the right format."""
-        assert len(row[self._first_col]) > 0, "The kraken2 tsv file is required."
+        assert len(
+            row[self._first_col]) > 0, "The kraken2 tsv file is required."
         self._validate_tsv_format(row[self._first_col])
         self._validate_tsv_file_exists(row[self._first_col])
 
     def _validate_second(self, row: dict) -> None:
         """Assert that the second tsv entry has the right format if it exists."""
-        assert len(row[self._second_col]) > 0, "The centrifuge tsv file is required."
+        assert len(
+            row[self._second_col]) > 0, "The centrifuge tsv file is required."
         self._validate_tsv_format(row[self._second_col])
         self._validate_tsv_file_exists(row[self._second_col])
 
     def _validate_tsv_format(self, filename: str) -> None:
         """Assert that a given filename has the expected tsv extensions."""
-        assert any(filename.endswith(extension) for extension in self.VALID_FORMATS), (
-            f"The tsv file has an unrecognized extension: {filename}\n"
-            f"It should be: {', '.join(self.VALID_FORMATS)}"
-        )
+        assert any(
+            filename.endswith(extension)
+            for extension in self.VALID_FORMATS), (
+                f"The tsv file has an unrecognized extension: {filename}\n"
+                f"It should be: {', '.join(self.VALID_FORMATS)}")
 
     def _validate_tsv_file_exists(self, filename: str) -> None:
         """Assert that a given file exists."""
-        assert Path(filename).is_file(), f"The tsv file seems to not exist: {filename}"
+        assert Path(
+            filename).is_file(), f"The tsv file seems to not exist: {filename}"
 
     def validate_unique_samples(self) -> None:
         """
@@ -133,7 +136,8 @@ def sniff_format(handle):
     handle.seek(0)
     sniffer = csv.Sniffer()
     if not sniffer.has_header(peek):
-        logger.critical("The given sample sheet does not appear to contain a header.")
+        logger.critical(
+            "The given sample sheet does not appear to contain a header.")
         sys.exit(1)
     dialect = sniffer.sniff(peek)
     return dialect
@@ -210,7 +214,8 @@ def parse_args(argv=None):
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
-    logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
+    logging.basicConfig(level=args.log_level,
+                        format="[%(levelname)s] %(message)s")
     if not args.file_in.is_file():
         logger.error("The given input file %s was not found!", args.file_in)
         sys.exit(2)
