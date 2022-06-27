@@ -159,15 +159,19 @@ def check_samplesheet(file_in):
     Args:
         file_in (pathlib.Path): The given tabular samplesheet. The format can be either
             CSV, TSV, or any other format automatically recognized by ``csv.Sniffer``.
-        file_out (pathlib.Path): Where the validated and transformed samplesheet should
-            be created; always in CSV format.
 
     Example:
         This function checks that the samplesheet follows the following structure:
 
             sample,kraken2,centrifuge
-            SAMPLE,SAMPLE_KRAKEN2.tsv,SAMPLE_CENTRIFUGE.tsv
-            SAMPLE,SAMPLE_KRAKEN2.tsv,SAMPLE_CENTRIFUGE.tsv
+            SAMPLE1,SAMPLE1_KRAKEN2.tsv,SAMPLE1_CENTRIFUGE.tsv
+            SAMPLE2,SAMPLE2_KRAKEN2.tsv,SAMPLE2_CENTRIFUGE.tsv
+
+        or:
+
+            sample	kraken2	centrifuge
+            SAMPLE1	SAMPLE1_KRAKEN2.tsv	SAMPLE1_CENTRIFUGE.tsv
+            SAMPLE2	SAMPLE2_KRAKEN2.tsv	SAMPLE2_CENTRIFUGE.tsv
     """
     required_columns: set = {"sample", "kraken2", "centrifuge"}
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
@@ -201,8 +205,9 @@ def check_samplesheet(file_in):
 def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Validate and transform a tabular samplesheet.",
-        epilog="Example: python check_samplesheet.py samplesheet.csv samplesheet.valid.csv",
+        description="Validate a csv/tsv samplesheet.",
+        epilog=
+        "Example: python check_samplesheet.py samplesheet.csv",
     )
     parser.add_argument(
         "file_in",
