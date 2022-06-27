@@ -102,17 +102,6 @@ class RowChecker:
         assert len(self._seen) == len(
             self.modified
         ), "The sample name and all tsv file names must be unique in comparison to the other rows."
-        # If there are fewer sample names than unique rows (rows with unique
-        # combination of sample name, kraken2.tsv name and centrifuge.tsv
-        # name)
-        # if len({trio[0] for trio in self._seen}) < len(self._seen):
-        #     counts: Counter = Counter(trio[0] for trio in self._seen)
-        #     seen: Counter = Counter()
-        #     for row in self.modified:
-        #         sample = row[self._sample_col]
-        #         seen[sample] += 1
-        #         if counts[sample] > 1:
-        #             row[self._sample_col] = f"{sample}_T{seen[sample]}"
 
 
 def read_head(handle, num_lines: int = 10) -> str:
@@ -193,13 +182,6 @@ def check_samplesheet(file_in):
                 logger.critical("%s On line %i.", str(error), i + 2)
                 sys.exit(1)
         checker.validate_unique_samples()
-    # header = list(reader.fieldnames)
-    # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
-    # with file_out.open(mode="w", newline="") as out_handle:
-    #     writer = csv.DictWriter(out_handle, header, delimiter=",")
-    #     writer.writeheader()
-    #     for row in checker.modified:
-    #         writer.writerow(row)
 
 
 def parse_args(argv=None):
