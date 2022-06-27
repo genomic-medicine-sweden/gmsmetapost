@@ -76,11 +76,13 @@ class RowChecker:
         """Assert that the first tsv entry is non-empty and has the right format."""
         assert len(row[self._first_col]) > 0, "The kraken2 tsv file is required."
         self._validate_tsv_format(row[self._first_col])
+        self._validate_tsv_file_exists(row[self._first_col])
 
     def _validate_second(self, row: dict) -> None:
         """Assert that the second tsv entry has the right format if it exists."""
         assert len(row[self._second_col]) > 0, "The centrifuge tsv file is required."
         self._validate_tsv_format(row[self._second_col])
+        self._validate_tsv_file_exists(row[self._second_col])
 
     def _validate_tsv_format(self, filename) -> None:
         """Assert that a given filename has the expected tsv extensions."""
@@ -88,6 +90,10 @@ class RowChecker:
             f"The tsv file has an unrecognized extension: {filename}\n"
             f"It should be: {', '.join(self.VALID_FORMATS)}"
         )
+
+    def _validate_tsv_file_exists(self, filename: str) -> None:
+        """Assert that a given file exists."""
+        assert Path(filename).is_file(), f"The tsv file seems to not exist: {filename}"
 
     def validate_unique_samples(self) -> None:
         """
