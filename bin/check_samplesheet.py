@@ -143,7 +143,7 @@ def sniff_format(handle):
     return dialect
 
 
-def check_samplesheet(file_in):
+def check_samplesheet(file_in, file_out):
     """
     Check that the tabular samplesheet has the structure expected by nf-core pipelines.
 
@@ -152,7 +152,8 @@ def check_samplesheet(file_in):
     Args:
         file_in (pathlib.Path): The given tabular samplesheet. The format can be either
             CSV, TSV, or any other format automatically recognized by ``csv.Sniffer``.
-
+        file_out (pathlib.Path): Where the validated samplesheet should be created;
+            always in CSV format.
     Example:
         This function checks that the samplesheet follows the following structure:
 
@@ -186,7 +187,13 @@ def check_samplesheet(file_in):
                 logger.critical("%s On line %i.", str(error), i + 2)
                 sys.exit(1)
         checker.validate_unique_samples()
-
+    header = list(reader.fieldnames)
+    # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
+    with file_out.open(mode="w", newline="") as out_handle:
+        writer = csv.DictWriter(out_handle, header, delimiter=",")
+        writer.writeheader()
+        for row in checker.modified:
+            writer.writerow(row)
 
 def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
@@ -200,6 +207,12 @@ def parse_args(argv=None):
         metavar="FILE_IN",
         type=Path,
         help="Tabular input samplesheet in CSV or TSV format.",
+    )
+    parser.add_argument(
+        "file_out",
+        metavar="FILE_OUT",
+        type=Path,
+        help="Transformed output samplesheet in CSV format.",
     )
     parser.add_argument(
         "-l",
@@ -219,7 +232,7 @@ def main(argv=None):
     if not args.file_in.is_file():
         logger.error("The given input file %s was not found!", args.file_in)
         sys.exit(2)
-    check_samplesheet(args.file_in)
+    check_samplesheet(args.file_in, args.file_out)
 
 
 if __name__ == "__main__":
