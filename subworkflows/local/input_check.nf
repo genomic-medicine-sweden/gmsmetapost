@@ -26,7 +26,7 @@ def create_tsv_channel(LinkedHashMap row) {
     def meta = [:]
     meta.id         = row.sample
 
-def array = []
+    def array = []
     if (!file(row.kraken2).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> kraken2 classification file does not exist!\n${row.kraken2}"
     }
