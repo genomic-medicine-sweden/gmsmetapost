@@ -1,4 +1,5 @@
 sample,kraken2,centrifuge
-sample1,tsvs/sample1_kraken2.report.tsv,tsvs/sample1_centrifuge.report.tsv
-sample2,tsvs/kraken2.report.tsv,tsvs/sample2_centrifuge.report.tsv
-sample3,tsvs/sample3_kraken2.report.tsv tsvs/sample3_centrifuge.report.tsv
+sample1,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample1_kraken2.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample1_centrifuge.report.tsv
+sample2,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample2_kraken2.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample2_centrifuge.report.tsv
+sample3,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample3_kraken2.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/sample3_centrifuge.report.tsv
+
