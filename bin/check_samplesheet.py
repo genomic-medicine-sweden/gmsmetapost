@@ -76,14 +76,14 @@ class RowChecker:
         assert len(
             row[self._first_col]) > 0, "The kraken2 tsv file is required."
         self._validate_tsv_format(row[self._first_col])
-        self._validate_tsv_file_exists(row[self._first_col])
+        #self._validate_tsv_file_exists(row[self._first_col])
 
     def _validate_second(self, row: dict) -> None:
         """Assert that the second tsv entry has the right format if it exists."""
         assert len(
             row[self._second_col]) > 0, "The centrifuge tsv file is required."
         self._validate_tsv_format(row[self._second_col])
-        self._validate_tsv_file_exists(row[self._second_col])
+        #self._validate_tsv_file_exists(row[self._second_col])
 
     def _validate_tsv_format(self, filename: str) -> None:
         """Assert that a given filename has the expected tsv extensions."""
