@@ -34,7 +34,7 @@ def create_tsv_channel(LinkedHashMap row) {
         exit 1, "ERROR: Please check input samplesheet -> centrifuge classification file does not exist!\n${row.centrifuge}"
     }
     if (!file(row.kaiju).exists()) {
-        exit 1, "ERROR: Please check input samplesheet -> kaiju classification file does not exist!\n${row.centrifuge}"
+        exit 1, "ERROR: Please check input samplesheet -> kaiju classification file does not exist!\n${row.kaiju}"
     }
     array = [ meta,
         file(row.kraken2), file(row.centrifuge), file(row.kaiju)
