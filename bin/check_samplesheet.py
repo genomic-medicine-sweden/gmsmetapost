@@ -28,6 +28,7 @@ class RowChecker:
         sample_col: str = "sample",
         first_col: str = "kraken2",
         second_col: str = "centrifuge",
+        third_col: str = "kaiju",
         **kwargs,
     ) -> None:
         """
@@ -46,6 +47,7 @@ class RowChecker:
         self._sample_col: str = sample_col
         self._first_col: str = first_col
         self._second_col: str = second_col
+        self._third_col: str = third_col
         self._seen: set = set()
         self.modified: List[dict] = []
 
@@ -61,8 +63,11 @@ class RowChecker:
         self._validate_sample(row)
         self._validate_first(row)
         self._validate_second(row)
-        self._seen.add((row[self._sample_col], row[self._first_col],
-                        row[self._second_col]))
+        self._validate_third(row)
+        self._seen.add((row[self._sample_col],
+                        row[self._first_col],
+                        row[self._second_col],
+                        row[self._third_col]))
         self.modified.append(row)
 
     def _validate_sample(self, row: dict) -> None:
@@ -84,6 +89,12 @@ class RowChecker:
             row[self._second_col]) > 0, "The centrifuge tsv file is required."
         self._validate_tsv_format(row[self._second_col])
         #self._validate_tsv_file_exists(row[self._second_col])
+
+    def _validate_third(self, row: dict) -> None:
+        """Assert that the third tsv entry has the right format if it exists."""
+        assert len(
+            row[self._third_col]) > 0, "The centrifuge tsv file is required."
+        self._validate_tsv_format(row[self._third_col])
 
     def _validate_tsv_format(self, filename: str) -> None:
         """Assert that a given filename has the expected tsv extensions."""
@@ -157,17 +168,17 @@ def check_samplesheet(file_in, file_out):
     Example:
         This function checks that the samplesheet follows the following structure:
 
-            sample,kraken2,centrifuge
-            SAMPLE1,SAMPLE1_KRAKEN2.tsv,SAMPLE1_CENTRIFUGE.tsv
-            SAMPLE2,SAMPLE2_KRAKEN2.tsv,SAMPLE2_CENTRIFUGE.tsv
+            sample,kraken2,centrifuge,kaiju
+            SAMPLE1,SAMPLE1_KRAKEN2.tsv,SAMPLE1_CENTRIFUGE.tsv,SAMPLE1_KAIJU.tsv
+            SAMPLE2,SAMPLE2_KRAKEN2.tsv,SAMPLE2_CENTRIFUGE.tsv,SAMPLE2_KAIJU.tsv
 
         or:
 
-            sample	kraken2	centrifuge
-            SAMPLE1	SAMPLE1_KRAKEN2.tsv	SAMPLE1_CENTRIFUGE.tsv
-            SAMPLE2	SAMPLE2_KRAKEN2.tsv	SAMPLE2_CENTRIFUGE.tsv
+            sample	kraken2	centrifuge  kaiju
+            SAMPLE1	SAMPLE1_KRAKEN2.tsv	SAMPLE1_CENTRIFUGE.tsv  SAMPLE1_KAIJU.tsv
+            SAMPLE2	SAMPLE2_KRAKEN2.tsv	SAMPLE2_CENTRIFUGE.tsv  SAMPLE2_KAIJU.tsv
     """
-    required_columns: set = {"sample", "kraken2", "centrifuge"}
+    required_columns: set = {"sample", "kraken2", "centrifuge", "kaiju"}
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))
