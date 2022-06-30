@@ -21,13 +21,14 @@ class RowChecker:
 
     """
 
-    VALID_FORMATS = (".tsv", )
+    VALID_FORMATS = (".tsv",)
 
     def __init__(
         self,
         sample_col: str = "sample",
         first_col: str = "kraken2",
         second_col: str = "centrifuge",
+        third_col: str = "kaiju",
         **kwargs,
     ) -> None:
         """
@@ -46,6 +47,7 @@ class RowChecker:
         self._sample_col: str = sample_col
         self._first_col: str = first_col
         self._second_col: str = second_col
+        self._third_col: str = third_col
         self._seen: set = set()
         self.modified: List[dict] = []
 
@@ -61,8 +63,15 @@ class RowChecker:
         self._validate_sample(row)
         self._validate_first(row)
         self._validate_second(row)
-        self._seen.add((row[self._sample_col], row[self._first_col],
-                        row[self._second_col]))
+        self._validate_third(row)
+        self._seen.add(
+            (
+                row[self._sample_col],
+                row[self._first_col],
+                row[self._second_col],
+                row[self._third_col],
+            )
+        )
         self.modified.append(row)
 
     def _validate_sample(self, row: dict) -> None:
@@ -73,30 +82,31 @@ class RowChecker:
 
     def _validate_first(self, row: dict) -> None:
         """Assert that the first tsv entry is non-empty and has the right format."""
-        assert len(
-            row[self._first_col]) > 0, "The kraken2 tsv file is required."
+        assert len(row[self._first_col]) > 0, "The kraken2 tsv file is required."
         self._validate_tsv_format(row[self._first_col])
-        #self._validate_tsv_file_exists(row[self._first_col])
+        # self._validate_tsv_file_exists(row[self._first_col])
 
     def _validate_second(self, row: dict) -> None:
         """Assert that the second tsv entry has the right format if it exists."""
-        assert len(
-            row[self._second_col]) > 0, "The centrifuge tsv file is required."
+        assert len(row[self._second_col]) > 0, "The centrifuge tsv file is required."
         self._validate_tsv_format(row[self._second_col])
-        #self._validate_tsv_file_exists(row[self._second_col])
+        # self._validate_tsv_file_exists(row[self._second_col])
+
+    def _validate_third(self, row: dict) -> None:
+        """Assert that the third tsv entry has the right format if it exists."""
+        assert len(row[self._third_col]) > 0, "The centrifuge tsv file is required."
+        self._validate_tsv_format(row[self._third_col])
 
     def _validate_tsv_format(self, filename: str) -> None:
         """Assert that a given filename has the expected tsv extensions."""
-        assert any(
-            filename.endswith(extension)
-            for extension in self.VALID_FORMATS), (
-                f"The tsv file has an unrecognized extension: {filename}\n"
-                f"It should be: {', '.join(self.VALID_FORMATS)}")
+        assert any(filename.endswith(extension) for extension in self.VALID_FORMATS), (
+            f"The tsv file has an unrecognized extension: {filename}\n"
+            f"It should be: {', '.join(self.VALID_FORMATS)}"
+        )
 
     def _validate_tsv_file_exists(self, filename: str) -> None:
         """Assert that a given file exists."""
-        assert Path(
-            filename).is_file(), f"The tsv file seems to not exist: {filename}"
+        assert Path(filename).is_file(), f"The tsv file seems to not exist: {filename}"
 
     def validate_unique_samples(self) -> None:
         """
@@ -136,8 +146,7 @@ def sniff_format(handle):
     handle.seek(0)
     sniffer = csv.Sniffer()
     if not sniffer.has_header(peek):
-        logger.critical(
-            "The given sample sheet does not appear to contain a header.")
+        logger.critical("The given sample sheet does not appear to contain a header.")
         sys.exit(1)
     dialect = sniffer.sniff(peek)
     return dialect
@@ -157,17 +166,17 @@ def check_samplesheet(file_in, file_out):
     Example:
         This function checks that the samplesheet follows the following structure:
 
-            sample,kraken2,centrifuge
-            SAMPLE1,SAMPLE1_KRAKEN2.tsv,SAMPLE1_CENTRIFUGE.tsv
-            SAMPLE2,SAMPLE2_KRAKEN2.tsv,SAMPLE2_CENTRIFUGE.tsv
+            sample,kraken2,centrifuge,kaiju
+            SAMPLE1,SAMPLE1_KRAKEN2.tsv,SAMPLE1_CENTRIFUGE.tsv,SAMPLE1_KAIJU.tsv
+            SAMPLE2,SAMPLE2_KRAKEN2.tsv,SAMPLE2_CENTRIFUGE.tsv,SAMPLE2_KAIJU.tsv
 
         or:
 
-            sample	kraken2	centrifuge
-            SAMPLE1	SAMPLE1_KRAKEN2.tsv	SAMPLE1_CENTRIFUGE.tsv
-            SAMPLE2	SAMPLE2_KRAKEN2.tsv	SAMPLE2_CENTRIFUGE.tsv
+            sample	kraken2	centrifuge  kaiju
+            SAMPLE1	SAMPLE1_KRAKEN2.tsv	SAMPLE1_CENTRIFUGE.tsv  SAMPLE1_KAIJU.tsv
+            SAMPLE2	SAMPLE2_KRAKEN2.tsv	SAMPLE2_CENTRIFUGE.tsv  SAMPLE2_KAIJU.tsv
     """
-    required_columns: set = {"sample", "kraken2", "centrifuge"}
+    required_columns: set = {"sample", "kraken2", "centrifuge", "kaiju"}
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))
@@ -195,12 +204,12 @@ def check_samplesheet(file_in, file_out):
         for row in checker.modified:
             writer.writerow(row)
 
+
 def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Validate a csv/tsv samplesheet.",
-        epilog=
-        "Example: python check_samplesheet.py samplesheet.csv",
+        epilog="Example: python check_samplesheet.py samplesheet.csv",
     )
     parser.add_argument(
         "file_in",
@@ -227,8 +236,7 @@ def parse_args(argv=None):
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
-    logging.basicConfig(level=args.log_level,
-                        format="[%(levelname)s] %(message)s")
+    logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
     if not args.file_in.is_file():
         logger.error("The given input file %s was not found!", args.file_in)
         sys.exit(2)

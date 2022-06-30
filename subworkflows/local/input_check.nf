@@ -20,7 +20,7 @@ workflow INPUT_CHECK {
     versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
 }
 
-// Function to get list of [ meta, [ kraken2, centrifuge ] ]
+// Function to get list of [ meta, [ kraken2, centrifuge, kaiju ] ]
 def create_tsv_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
@@ -33,10 +33,11 @@ def create_tsv_channel(LinkedHashMap row) {
     if (!file(row.centrifuge).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> centrifuge classification file does not exist!\n${row.centrifuge}"
     }
+    if (!file(row.kaiju).exists()) {
+        exit 1, "ERROR: Please check input samplesheet -> kaiju classification file does not exist!\n${row.kaiju}"
+    }
     array = [ meta,
-        file(row.kraken2), file(row.centrifuge)
+        file(row.kraken2), file(row.centrifuge), file(row.kaiju)
     ]
     return array
-
-
 }
