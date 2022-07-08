@@ -3,6 +3,7 @@
 //
 
 include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
+include { SAMPLESHEET_PARSE } from '../../modules/local/samplesheet_parse'
 
 workflow INPUT_CHECK {
     take:
@@ -14,6 +15,8 @@ workflow INPUT_CHECK {
         .splitCsv ( header:true, sep:',' )
         .map { create_tsv_channel(it) }
         .set { hits }
+
+    SAMPLESHEET_PARSE (samplesheet)
 
     emit:
     hits                                     // channel: [ val(meta), [ hits ] ]
