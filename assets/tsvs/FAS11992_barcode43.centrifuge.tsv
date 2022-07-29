@@ -1,0 +1,54 @@
+ 23.38	3353	3353	U	0	unclassified
+ 76.62	10987	3	-	1	root
+ 73.61	10556	0	-	131567	 cellular organisms
+ 73.61	10556	0	D	2759	 Eukaryota
+ 73.61	10556	0	-	33154	 Opisthokonta
+ 73.61	10556	0	K	33208	 Metazoa
+ 73.61	10556	0	-	6072	 Eumetazoa
+ 73.61	10556	0	-	33213	 Bilateria
+ 73.61	10556	0	-	33511	 Deuterostomia
+ 73.61	10556	0	P	7711	 Chordata
+ 73.61	10556	0	-	89593	 Craniata
+ 73.61	10556	0	-	7742	 Vertebrata
+ 73.61	10556	0	-	7776	 Gnathostomata
+ 73.61	10556	0	-	117570	 Teleostomi
+ 73.61	10556	0	-	117571	 Euteleostomi
+ 73.61	10556	0	-	8287	 Sarcopterygii
+ 73.61	10556	0	-	1338369	 Dipnotetrapodomorpha
+ 73.61	10556	0	-	32523	 Tetrapoda
+ 73.61	10556	0	-	32524	 Amniota
+ 73.61	10556	0	C	40674	 Mammalia
+ 73.61	10556	0	-	32525	 Theria
+ 73.61	10556	0	-	9347	 Eutheria
+ 73.61	10556	0	-	1437010	 Boreoeutheria
+ 73.61	10556	0	-	314146	 Euarchontoglires
+ 73.61	10556	0	O	9443	 Primates
+ 73.61	10556	0	-	376913	 Haplorrhini
+ 73.61	10556	0	-	314293	 Simiiformes
+ 73.61	10556	0	-	9526	 Catarrhini
+ 73.61	10556	0	-	314295	 Hominoidea
+ 73.61	10556	0	F	9604	 Hominidae
+ 73.61	10556	0	-	207598	 Homininae
+ 73.61	10556	0	G	9605	 Homo
+ 73.61	10556	10556	S	9606	 Homo sapiens
+ 2.98	428	0	D	10239	 Viruses
+ 2.87	412	0	O	28883	 Caudovirales
+ 2.87	412	0	F	10662	 Myoviridae
+ 2.87	411	407	G	186777	 Muvirus
+ 0.03	4	0	S	10677	 Escherichia virus Mu
+ 0.03	4	4	-	2681603	 Escherichia phage Mu
+ 0.01	1	0	-	1198136	 Tevenvirinae
+ 0.01	1	0	G	10663	 Tequatrovirus
+ 0.01	1	0	S	2049937	 Escherichia virus HY01
+ 0.01	1	1	-	1434323	 Escherichia phage HY01
+ 0.08	11	0	F	10508	 Adenoviridae
+ 0.08	11	0	G	10509	 Mastadenovirus
+ 0.08	11	11	S	129951	 Human mastadenovirus C
+ 0.03	4	0	O	548681	 Herpesvirales
+ 0.03	4	0	F	10292	 Herpesviridae
+ 0.03	4	0	-	10293	 Alphaherpesvirinae
+ 0.03	4	0	G	10319	 Varicellovirus
+ 0.03	4	4	S	10335	 Human alphaherpesvirus 3
+ 0.01	1	0	F	687329	 Anelloviridae
+ 0.01	1	0	G	687333	 Gammatorquevirus
+ 0.01	1	1	S	2065045	 Torque teno midi virus 4

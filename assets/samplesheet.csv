@@ -1,2 +1,3 @@
 sample,kraken2,centrifuge
-sample1,/home/sofia.stamouli/gmsmetapost/assets/tsvs/Viruspool_pe-Viruspool-kraken2.kraken2.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/Viruspool_pe-Viruspool.centrifuge.tsv
+barcode43,/home/sofia.stamouli/gmsmetapost/assets/tsvs/FAS11992_barcode43.kraken.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/FAS11992_barcode43.centrifuge.tsv
+barcode34,/home/sofia.stamouli/gmsmetapost/assets/tsvs/FAR96832_pass_barcode34.kraken.report.tsv,/home/sofia.stamouli/gmsmetapost/assets/tsvs/FAR96832_pass_barcode34.centrifuge.tsv
