@@ -1,0 +1,43 @@
+name	taxID	taxRank	genomeSize	numReads	numUniqueReads	abundance
+Homo sapiens	9606	species	3272089205	44199	6871	4.86857e-10
+Lelystad virus	11049	leaf	15111	305	305	0.0
+Human immunodeficiency virus 1	11676	species	9181	741	741	0.0
+Rice ragged stunt virus	42475	species	26164	1	1	0.0
+Armadillidium vulgare iridescent virus	72201	leaf	220222	1	0	0.0
+Pseudocowpox virus	129726	species	145289	1	0	0.0
+Pseudomonas virus phiKZ	169683	species	280334	42	41	0.0
+Staphylococcus virus K	221915	species	148317	3	0	0.0
+Staphylococcus virus G1	292029	species	140903	3	0	0.0
+Staphylococcus phage 812	307898	species	142096	3	0	0.0
+Cyprinid herpesvirus 1	317858	species	291144	15	14	0.0
+Pseudomonas phage LKA1	386793	leaf	41593	1	1	0.0
+Chrysochromulina ericina virus	455364	species	473558	12	9	0.0
+Porcine hokovirus	494652	leaf	5114	92	80	1.52541e-05
+Cafeteria roenbergensis virus BV-PW1	693272	leaf	617453	34	19	0.0
+Parvovirus YX-2010/CHN	754189	leaf	5444	4671573	2908735	0.542266
+Staphylococcus phage G15	760530	leaf	139806	2	0	0.0
+Staphylococcus phage Sb1	1007127	leaf	127188	3	0	0.0
+Porcine parvovirus 2	1126383	species	5426	1000534	693018	0.00187512
+Cronobacter phage vB_CsaM_GAP32	1141136	species	358663	1	1	0.0
+Salmonella phage FSL SP-058	1173761	leaf	72394	6	0	0.0
+Salmonella phage FSL SP-076	1173762	leaf	72098	6	0	0.0
+Salmonella phage STML-198	1204531	leaf	158099	1	0	0.0
+Porcine partetravirus	1208310	species	5403	33	21	2.98275e-15
+Staphylococcus phage Team1	1262512	leaf	140903	3	0	0.0
+Escherichia phage PBECO4	1273738	leaf	348113	5	5	0.0
+Streptomyces phage Zemlya	1327760	leaf	51077	9	9	0.0
+Salmonella phage STP4-a	1445860	leaf	159914	1	0	0.0
+Aureococcus anophagefferens virus	1474867	species	370920	17893	5	0.0
+Ungulate tetraparvovirus 3	1511916	species	5444	9586812	7886816	0.455844
+Staphylococcus phage P108	1526408	leaf	140807	12	10	0.0
+Escherichia phage Av-05	1527519	leaf	120938	1	0	0.0
+Delftia phage IME-DE1	1647385	species	38084	1	1	0.0
+Staphylococcus phage SPbeta-like	1732063	species	127726	8	8	0.0
+Kayvirus	1857843	genus	138875	6	6	0.0
+Klebsiella phage vB_Kpn_IME260	1912318	leaf	123490	15	15	0.0
+Hubei picorna-like virus 31	1923111	species	8584	26	23	0.0
+Vibrio phage pTD1	1938577	leaf	239276	3	3	0.0
+Pseudomonas phage SL2	2041345	leaf	279696	8	7	0.0
+Salmonella phage Melville	2041413	leaf	159323	1	0	0.0
+Escherichia phage 186	2681630	leaf	30624	1	0	0.0
+MT123292.2 Severe acute respiratory syndrome coronavirus 2 isolate SARS-CoV-2/IQTC04/human/2020/CHN, complete genome	9000056	leaf	29923	23	23	0.0
