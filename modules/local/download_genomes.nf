@@ -1,10 +1,10 @@
 process DOWNLOAD_GENOMES {
     tag "$taxon_name - $taxid"
 
-    conda (params.enable_conda ? "conda-forge::python=3.10.4 conda-forge::pydantic=1.9.1 conda-forge::ncbi-datasets-cli=13.33.0 " : null)
+    conda (params.enable_conda ? "conda-forge::python>=3.9 conda-forge::pydantic=1.9.1 conda-forge::ncbi-datasets-cli=13.33.0 " : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'library://ljmesi/gmsmetapost/datasets_pydantic:20220808' :
-        'quay.io/biocontainers/python:3.10.4' }"
+        'library://ljmesi/gmsmetapost/datasets_pydantic:20220810' :
+        'docker://genomicmedicinesweden/gmsmetapost-download-genomes:1.0.0' }"
 
     input:
     tuple val(taxon_name), val(taxid)
