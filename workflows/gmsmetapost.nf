@@ -77,6 +77,7 @@ workflow GMSMETAPOST {
                             .map { row-> tuple(row.taxon_name, row.taxid) }
 
     ch_ref_genomes = DOWNLOAD_GENOMES( ch_filtered_hits )
+    ch_versions = ch_versions.mix(DOWNLOAD_GENOMES.out.versions)
 
     //
     // MODULE: Run FastQC
