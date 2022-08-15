@@ -10,13 +10,13 @@ include { ADD_METADATA           } from '../../modules/local/add_metadata'
 workflow PREPARE_MAPPING {
 
     take:
-    classifier_results      // params.filtered_hits
+    classifier_metadata      // params.filtered_hits
 
 
     main:
     ch_versions = Channel.empty()
 
-    ch_filtered_hits = Channel.fromPath(classifier_results)
+    ch_filtered_hits = Channel.fromPath(classifier_metadata)
                             .splitCsv ( header:true )
                             .map { create_tsv_channel(it) }
     // ch_filtered_hits.dump(tag: "test")
