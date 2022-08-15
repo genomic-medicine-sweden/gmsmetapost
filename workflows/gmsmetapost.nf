@@ -36,7 +36,8 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK      } from '../subworkflows/local/input_check'
-include { DOWNLOAD_GENOMES } from '../modules/local/download_genomes'
+include { PREPARE_MAPPING } from '../subworkflows/local/prepare_mapping'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,12 +73,12 @@ workflow GMSMETAPOST {
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
-    ch_filtered_hits = Channel.fromPath(params.filtered_hits)
-                            .splitCsv ( header:true, sep:'\t' )
-                            .map { row-> tuple(row.taxon_name, row.taxid) }
+    PREPARE_MAPPING( params.filtered_hits )
 
-    ch_ref_genomes = DOWNLOAD_GENOMES( ch_filtered_hits )
-    ch_versions = ch_versions.mix(DOWNLOAD_GENOMES.out.versions)
+
+
+
+
 
     //
     // MODULE: Run FastQC
