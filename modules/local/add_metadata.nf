@@ -3,7 +3,7 @@ process ADD_METADATA {
 
     conda (params.enable_conda ? "conda-forge::python>=3.9 conda-forge::pydantic=1.9.1 conda-forge::ncbi-datasets-cli=13.35.0 conda-forge::parallel=20220722 conda-forge::pandas=1.4.3 " : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'library://ljmesi/gmsmetapost/datasets_pydantic:20220812' :
+        'library://ljmesi/gmsmetapost/datasets_pydantic:20220815' :
         'docker://genomicmedicinesweden/gmsmetapost-download-genomes:latest' }"
 
     input:
