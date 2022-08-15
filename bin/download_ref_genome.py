@@ -105,19 +105,15 @@ def choose_assembly(assemblies: list[Assembly]) -> Assembly:
     Returns:
         Assembly: The latest submitted assembly.
     """
-    submission_date_sorted: list = sorted(
-        assemblies, key=lambda x: x.assemblyInfo.submissionDate, reverse=True
-    )
-    return submission_date_sorted[0]
+    return sorted(assemblies, key=lambda x: x.assemblyInfo.submissionDate, reverse=True)
 
 
-def download_genome(taxid: str, extra_arg: str = "--no-progressbar") -> None:
+def download_genomes_zip(taxid: str, extra_arg: str = "--no-progressbar") -> None:
     """Download genome assembly based on given taxid
 
     Args:
         taxid (str): The taxid of a species which genome to download
     """
-    try:
         run(
             [
                 "datasets",
@@ -134,20 +130,8 @@ def download_genome(taxid: str, extra_arg: str = "--no-progressbar") -> None:
                 f"{taxid}.zip",
             ],
             check=True,
-            timeout=180,
+        timeout=600,  # Download for 10 minutes before erroring out
         )
-    except TimeoutExpired as timeout_error_msg:
-        logger.error(
-            "The download took too long time: %s\n%s", taxid, timeout_error_msg
-        )
-        sys.exit(1)
-    except CalledProcessError as called_proc_error_msg:
-        logger.error(
-            "The return code of the downloading was non-zero: %s\n%s",
-            taxid,
-            called_proc_error_msg,
-        )
-        sys.exit(2)
 
 
 def unzip(zipped_file: Path, unzip_dir: Path = Path.cwd()) -> None:
@@ -266,7 +250,23 @@ def main(argv=None):
     logging.basicConfig(level=args.log_level, format="[%(levelname)s] %(message)s")
 
     taxid: str = args.taxid
-    download_genome(taxid)
+    download_succeeded: bool = True
+    try:
+        download_genomes_zip(taxid)
+    except TimeoutExpired as timeout_error_msg:
+        logger.error(
+            "The download took too long time: %s\n%s", taxid, timeout_error_msg
+        )
+        download_succeeded = False
+    except CalledProcessError as called_proc_error_msg:
+        logger.error(
+            "The return code of the downloading for taxid %s was non-zero:\n%s",
+            taxid,
+            called_proc_error_msg,
+        )
+        download_succeeded = False
+
+    if download_succeeded:
     unzip(Path(f"{taxid}.zip"))
     latest_assembly: Assembly = choose_assembly(open_jsonl_file(args.jsonl_file))
     accession: str = get_assembly_accession(latest_assembly)
