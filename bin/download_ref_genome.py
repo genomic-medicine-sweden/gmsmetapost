@@ -93,17 +93,15 @@ class Assembly(BaseModel):
     taxId: str = ""
 
 
-def choose_assembly(assemblies: list[Assembly]) -> Assembly:
+def sort_assemblies(assemblies: list[Assembly]) -> list[Assembly]:
     """
-    Choose the assembly which has the latest submission date.
-    We're using submission date because not all assemblies were released so
-    release date information is not always available.
+    Sort assemblies by date and return them in a list from newest to oldest
 
     Args:
         assemblies (list[Assembly]): List of pydantic Assemblies
 
     Returns:
-        Assembly: The latest submitted assembly.
+        list[Assembly]: Sorted list of assemblies
     """
     return sorted(assemblies, key=lambda x: x.assemblyInfo.submissionDate, reverse=True)
 
@@ -114,24 +112,24 @@ def download_genomes_zip(taxid: str, extra_arg: str = "--no-progressbar") -> Non
     Args:
         taxid (str): The taxid of a species which genome to download
     """
-        run(
-            [
-                "datasets",
-                "download",
-                "genome",
-                "taxon",
-                taxid,
-                "--exclude-gff3",
-                "--exclude-protein",
-                "--exclude-rna",
-                "--exclude-genomic-cds",
-                extra_arg,
-                "--filename",
-                f"{taxid}.zip",
-            ],
-            check=True,
+    run(
+        [
+            "datasets",
+            "download",
+            "genome",
+            "taxon",
+            taxid,
+            "--exclude-gff3",
+            "--exclude-protein",
+            "--exclude-rna",
+            "--exclude-genomic-cds",
+            extra_arg,
+            "--filename",
+            f"{taxid}.zip",
+        ],
+        check=True,
         timeout=600,  # Download for 10 minutes before erroring out
-        )
+    )
 
 
 def unzip(zipped_file: Path, unzip_dir: Path = Path.cwd()) -> None:
@@ -171,7 +169,7 @@ def parse_args(argv=None):
         "--log-level",
         help="The desired log level (default WARNING).",
         choices=("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"),
-        default="WARNING",
+        default="ERROR",
     )
     return parser.parse_args(argv)
 
@@ -267,11 +265,25 @@ def main(argv=None):
         download_succeeded = False
 
     if download_succeeded:
-    unzip(Path(f"{taxid}.zip"))
-    latest_assembly: Assembly = choose_assembly(open_jsonl_file(args.jsonl_file))
-    accession: str = get_assembly_accession(latest_assembly)
-    latest_assembly_path: Path = Path.cwd() / f"ncbi_dataset/data/{accession}"
-    copy_assembly_file(extract_assembly_file_path(latest_assembly_path), Path.cwd())
+        unzip(Path(f"{taxid}.zip"))
+        assemblies: list[Assembly] = sort_assemblies(open_jsonl_file(args.jsonl_file))
+        # Handle the case if the latest assembly doesn't contain an assembly .fna file
+        for assembly in assemblies:
+            accession: str = get_assembly_accession(assembly)
+            latest_assembly_path: Path = Path.cwd() / f"ncbi_dataset/data/{accession}"
+            try:
+                assembly_path_checked = extract_assembly_file_path(latest_assembly_path)
+            except FileNotFoundError:
+                logger.error(
+                    "No assembly file existed in path: %s",
+                    latest_assembly_path,
+                )
+                continue
+            break
+        if assembly_path_checked:
+            copy_assembly_file(assembly_path_checked, Path.cwd())
+        else:
+            logger.error("No assembly files were found for taxid: %s", taxid)
 
 
 if __name__ == "__main__":
