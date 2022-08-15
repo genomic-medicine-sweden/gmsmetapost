@@ -35,7 +35,9 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { INPUT_CHECK      } from '../subworkflows/local/input_check'
+include { PREPARE_MAPPING } from '../subworkflows/local/prepare_mapping'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,6 +72,13 @@ workflow GMSMETAPOST {
         ch_input
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+
+    PREPARE_MAPPING( params.filtered_hits )
+
+
+
+
+
 
     //
     // MODULE: Run FastQC

@@ -1,0 +1,95 @@
+taxon_name	rpm	taxid	taxonomic_rank	classifier	centrifuge_genome_size	centrifuge_num_reads	centrifuge_abundance	kaiju_percent	kraken2_percentage_fragments_covered	kraken2_num_fragments_covered	reads_count	cami_taxid	cami_rank	cami_taxpath	cami_taxpathsn	cami_percentage
+Ungulate tetraparvovirus 3	70062.2	1511916	species	centrifuge	5444	1389.0	0.0				1542					
+Parvovirus YX-2010/CHN	45663.1	754189	leaf	centrifuge	5444	851.0	0.0				1005					
+Porcine parvovirus 2	2680.7	1126383	species	centrifuge	5426	52.0	0.0				59					
+Pseudomonas virus phiKZ	1726.6	169683	species	centrifuge	280334	29.0	0.0				38					
+Pseudomonas phage SL2	1317.6	2041345	leaf	centrifuge	279696	20.0	0.0				29					
+Parvovirinae	925.9	40119	F1	kraken2					4.93	2288	43					
+Rotavirus A	499.8	28875	species	centrifuge	18562	11.0	0.0				11					
+Bacillus phage BPS13	227.2	1136731	leaf	centrifuge	158305	0.0	0.0				5					
+Bacillus phage BPS10C	227.2	1277886	leaf	centrifuge	159590	0.0	0.0				5					
+Porcine endogenous retrovirus E	227.2	168238	leaf	centrifuge	8072	5.0	0.0				5					
+Vibrio phage pTD1	227.2	1938577	leaf	centrifuge	239276	5.0	0.0				5					
+Prochlorococcus phage P-HM2	181.7	445696	species	centrifuge	183806	3.0	0.0				4					
+Escherichia phage PBECO4	136.3	1273738	leaf	centrifuge	348113	3.0	0.0				3					
+Phaeocystis globosa virus	136.3	251749	species	centrifuge	459984	3.0	0.0				3					
+Gryllus bimaculatus nudivirus	136.3	432587	species	centrifuge	96944	2.0	0.0				3					
+Bacillus virus PBS1	90.9	10683	species	centrifuge	252197	1.0	0.0				2					
+Klebsiella phage vB_Kpn_IME260	90.9	1912318	leaf	centrifuge	123490	2.0	0.0				2					
+Haemophilus phage Aaphi23	90.9	230158	species	centrifuge	43033	2.0	0.0				2					
+Cyprinid herpesvirus 1	90.9	317858	species	centrifuge	291144	0.0	0.0				2					
+Cafeteria roenbergensis virus BV-PW1	90.9	693272	leaf	centrifuge	617453	2.0	0.0				2					
+Plutella xylostella granulovirus	90.9	98383	species	centrifuge	100999	2.0	0.0				2					
+Spissistilus festinus reovirus	45.4	1004049	species	centrifuge	25139	1.0	0.0				1					
+Paramecium bursaria Chlorella virus 1	45.4	10506	species	centrifuge	330611	1.0	0.0				1					
+Mycobacterium virus Rumpelstiltskin	45.4	1086751	species	centrifuge	69279	0.0	0.0				1					
+Salmonella phage vB_SenM-S16	45.4	1087482	leaf	centrifuge	160221	0.0	0.0				1					
+Staphylococcus phage SpaA1	45.4	1118063	species	centrifuge	42784	0.0	0.0				1					
+Clostridium phage phi24R	45.4	1128071	species	centrifuge	18919	0.0	0.0				1					
+Cronobacter phage vB_CsaM_GAP32	45.4	1141136	species	centrifuge	358663	1.0	0.0				1					
+Klebsiella phage vB_KleM_RaK2	45.4	1147094	leaf	centrifuge	345809	0.0	0.0				1					
+Yado-kari virus 1	45.4	1148496	species	centrifuge	6310	1.0	0.0				1					
+Helicobacter phage 1961P	45.4	1154995	leaf	centrifuge	26836	0.0	0.0				1					
+Uukuniemi virus	45.4	11591	leaf	centrifuge	11372	1.0	0.0				1					
+Bacillus phage BtCS33	45.4	1194641	species	centrifuge	41992	0.0	0.0				1					
+Helicobacter phage KHP40	45.4	1204178	leaf	centrifuge	26449	0.0	0.0				1					
+Citrus yellow vein clearing virus	45.4	1214459	species	centrifuge	7531	1.0	0.0				1					
+Sibine fusca densovirus	45.4	1217821	leaf	centrifuge	5012	1.0	0.0				1					
+Campylobacter phage CP30A	45.4	1229752	leaf	centrifuge	133572	0.0	0.0				1					
+Acanthamoeba polyphaga moumouvirus	45.4	1269028	leaf	centrifuge	1021348	1.0	0.0				1					
+Choristoneura rosaceana entomopoxvirus 'L'	45.4	1293539	leaf	centrifuge	282895	1.0	0.0				1					
+Bacillus phage vB_BanS-Tsamsa	45.4	1308863	species	centrifuge	168876	1.0	0.0				1					
+Eptesipox virus	45.4	1329402	species	centrifuge	176688	1.0	0.0				1					
+Pandoravirus salinus	45.4	1349410	species	centrifuge	2473870	1.0	0.0				1					
+Bacillus phage phiCM3	45.4	1357713	species	centrifuge	38772	0.0	0.0				1					
+Klebsiella phage K64-1	45.4	1439894	leaf	centrifuge	346602	0.0	0.0				1					
+Bacillus phage vB_BtS_BMBtp3	45.4	1445809	species	centrifuge	51366	1.0	0.0				1					
+Pithovirus sibericum	45.4	1450746	species	centrifuge	610033	1.0	0.0				1					
+Listeria phage LP-030-3	45.4	1458852	species	centrifuge	41156	0.0	0.0				1					
+Aureococcus anophagefferens virus	45.4	1474867	species	centrifuge	370920	0.0	0.0				1					
+Synechococcus phage ACG-2014g	45.4	1493512	species	centrifuge	174885	0.0	0.0				1					
+Duck adenovirus 2	45.4	1520006	leaf	centrifuge	43734	1.0	0.0				1					
+Campylobacter phage PC14	45.4	1541686	species	centrifuge	134927	0.0	0.0				1					
+Tipula oleracea nudivirus	45.4	1546257	species	centrifuge	145704	1.0	0.0				1					
+Pseudoplusia includens SNPV IE	45.4	1592335	leaf	centrifuge	139132	1.0	0.0				1					
+Proteus phage vB_PmiM_Pm5461	45.4	1636250	species	centrifuge	161989	1.0	0.0				1					
+Bacillus phage phi4B1	45.4	1643324	species	centrifuge	38663	0.0	0.0				1					
+Wuhan aphid virus 2	45.4	1746068	species	centrifuge	10890	0.0	0.0				1					
+Invertebrate iridescent virus 6	45.4	176652	species	centrifuge	212482	1.0	0.0				1					
+Pectobacterium phage CBB	45.4	1792242	species	centrifuge	378379	1.0	0.0				1					
+Bacillus phage AR9	45.4	1815509	species	centrifuge	251042	0.0	0.0				1					
+Salmonella phage vB_SnwM_CGG4-1	45.4	1815631	species	centrifuge	159878	0.0	0.0				1					
+Acinetobacter phage vB_AbaM_ME3	45.4	1837876	leaf	centrifuge	234900	1.0	0.0				1					
+Eupatorium yellow vein mosaic virus	45.4	186637	species	centrifuge	2778	1.0	0.0				1					
+Mycobacterium phage Gardann	45.4	1873696	species	centrifuge	76012	0.0	0.0				1					
+Synechococcus phage S-CAM22	45.4	1883365	species	centrifuge	172345	1.0	0.0				1					
+Lymphocystis disease virus Sa	45.4	1898060	species	centrifuge	208501	1.0	0.0				1					
+Campylobacter phage vB_CjeM_Los1	45.4	1904491	leaf	centrifuge	134073	0.0	0.0				1					
+Beihai picorna-like virus 63	45.4	1922609	species	centrifuge	8334	1.0	0.0				1					
+Hubei diptera virus 3	45.4	1922884	leaf	centrifuge	12096	1.0	0.0				1					
+Noumeavirus	45.4	1955558	species	centrifuge	376207	1.0	0.0				1					
+Proteus phage VB_PmiS-Isfahan	45.4	1969841	species	centrifuge	54836	0.0	0.0				1					
+Neodiprion abietis NPV	45.4	204507	species	centrifuge	84264	1.0	0.0				1					
+Pandoravirus quercus	45.4	2107709	species	centrifuge	2077288	1.0	0.0				1					
+Influenza A virus (A/Puerto Rico/8/1934(H1N1))	45.4	211044	leaf	centrifuge	13588	1.0	0.0				1					
+Acanthamoeba polyphaga mimivirus	45.4	212035	species	centrifuge	1181549	1.0	0.0				1					
+Mycoplasma phage phiMFV1	45.4	280702	species	centrifuge	18855	1.0	0.0				1					
+Listeria phage P35	45.4	330398	species	centrifuge	35822	0.0	0.0				1					
+Influenza A virus (A/New York/392/2004(H3N2))	45.4	335341	leaf	centrifuge	13627	1.0	0.0				1					
+Bacillus phage Fah	45.4	345922	species	centrifuge	37974	0.0	0.0				1					
+Bacillus phage Gamma	45.4	347962	species	centrifuge	37253	0.0	0.0				1					
+Bacillus virus Wbeta	45.4	359961	species	centrifuge	40867	0.0	0.0				1					
+Listeria phage A500	45.4	40522	species	centrifuge	38867	0.0	0.0				1					
+Chrysochromulina ericina virus	45.4	455364	species	centrifuge	473558	1.0	0.0				1					
+Staphylococcus virus Twort	45.4	55510	species	centrifuge	130706	0.0	0.0				1					
+BeAn 58058 virus	45.4	67082	species	centrifuge	163005	1.0	0.0				1					
+Torque teno virus 5	45.4	687344	species	centrifuge	3229	1.0	0.0				1					
+Beluga whale coronavirus SW1	45.4	694015	species	centrifuge	31686	1.0	0.0				1					
+Campylobacter virus CP220	45.4	722417	species	centrifuge	177534	0.0	0.0				1					
+Campylobacter virus CPt10	45.4	722418	species	centrifuge	175720	0.0	0.0				1					
+Oryctes rhinoceros nudivirus	45.4	92521	species	centrifuge	127615	1.0	0.0				1					
+Cyanophage P-RSM6	45.4	929832	species	centrifuge	192497	1.0	0.0				1					
+Campylobacter virus NCTC12673	45.4	934027	species	centrifuge	135041	0.0	0.0				1					
+Tomato leaf curl Ranchi virus	45.4	938276	species	centrifuge	2762	1.0	0.0				1					
+Influenza A virus (A/goose/Guangdong/1/1996(H5N1))	45.4	93838	leaf	centrifuge	13590	1.0	0.0				1					
+Iris severe mosaic virus	21.5	32620	S	kraken2					0.0	1	1	32620	species	10239|2732408|2732507|2732550|39729|12195|32620	Viruses|Pisuviricota|Stelpaviricetes|Patatavirales|Potyviridae|Potyvirus|Iris severe mosaic virus	0.009009009009009

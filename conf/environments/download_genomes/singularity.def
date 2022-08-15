@@ -1,0 +1,29 @@
+Bootstrap:docker
+From:continuumio/miniconda3:4.12.0
+
+%labels
+	MAINTAINER Lauri Mesilaakso <lauri.mesilaakso@regionostergotland.se>
+	DESCRIPTION Container for downloading genomes based on taxids in a tsv file
+	VERSION 0.1.0
+
+%environment
+    export PATH="/opt/conda/envs/download_genomes/bin:$PATH"
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+
+%files
+    environment.yml /environment.yml
+
+%post
+    /opt/conda/bin/conda update conda
+    /opt/conda/bin/conda install mamba -c conda-forge
+    /opt/conda/bin/conda update mamba -c conda-forge
+    /opt/conda/bin/mamba env create -f /environment.yml
+
+    conda clean -a
+    apt-get clean -y
+    rm -rf /var/lib/apt/lists/\* /tmp/\* /var/tmp/*
+
+%runscript
+    . /opt/conda/bin/activate download_genomes
+	exec "$@"

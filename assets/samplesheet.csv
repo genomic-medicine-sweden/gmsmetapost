@@ -1,4 +1,3 @@
 sample,kraken2,centrifuge,kaiju
-sample1,assets/tsvs/sample1_kraken2.report.tsv,assets/tsvs/sample1_centrifuge.report.tsv,assets/tsvs/sample1_kaiju.report.tsv
-sample2,assets/tsvs/sample2_kraken2.report.tsv,assets/tsvs/sample2_centrifuge.report.tsv,assets/tsvs/sample2_kaiju.report.tsv
-sample3,assets/tsvs/sample3_kraken2.report.tsv,assets/tsvs/sample3_centrifuge.report.tsv,assets/tsvs/sample3_kaiju.report.tsv
+sample1,assets/tsvs/SRR12875570_pe-SRR12875570-kraken2.kraken2.report.tsv,assets/tsvs/SRR12875570_pe-SRR12875570-centrifuge.report.tsv,assets/tsvs/SRR12875570_pe-SRR12875570-kaiju.tsv
+sample2,assets/tsvs/SRR12875558_se-SRR12875558-kraken2.kraken2.report.tsv,assets/tsvs/SRR12875558_se-SRR12875558-centrifuge.report.tsv,assets/tsvs/SRR12875558_se-SRR12875558-kaiju.tsv

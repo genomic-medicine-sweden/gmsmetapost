@@ -1,0 +1,7 @@
+taxon_name	rpm	taxid	taxonomic_rank	classifier	centrifuge_genome_size	centrifuge_num_reads	centrifuge_abundance	kaiju_percent	kraken2_percentage_fragments_covered	kraken2_num_fragments_covered	reads_count	cami_taxid	cami_rank	cami_taxpath	cami_taxpathsn	cami_percentage
+Ungulate tetraparvovirus 3	752160.9	1511916	S	kraken2					75.06	10292101	8540463	1511916	species	10239|2732415|2732422|2732534|10780|1511911|1511916	Viruses|Cossaviricota|Quintoviricetes|Piccovirales|Parvoviridae|Tetraparvovirus|Ungulate tetraparvovirus 3	0.167792511049955
+Parvovirus YX-2010/CHN	253004.1	754189	leaf	centrifuge	5444	4671573	0.542266				2908735					
+Porcine parvovirus 2	60279.3	1126383	species	centrifuge	5426	1000534	0.00187512				693018	1126383	species	10239|2732415|2732422|2732534|10780|1506574|1126383	Viruses|Cossaviricota|Quintoviricetes|Piccovirales|Parvoviridae|Protoparvovirus|Porcine parvovirus 2	0.00187512
+Parvovirinae	58703.0	40119	F1	kraken2					82.36	11293160	666547					
+Human immunodeficiency virus 1	64.5	11676	species	centrifuge	9181	741	0.0				741					
+Lelystad virus	26.5	11049	leaf	centrifuge	15111	305	0.0				305					
