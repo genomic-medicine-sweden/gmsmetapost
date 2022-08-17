@@ -15,7 +15,7 @@ process VALIDATE_TAXIDS {
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """
-    cat $tsv \
+    cat $meta.path \
     | parallel --header : --colsep '\t' \
     validate_taxids.py {taxid} \
     >> excludable_taxids.txt

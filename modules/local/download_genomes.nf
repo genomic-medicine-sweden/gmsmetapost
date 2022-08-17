@@ -7,11 +7,11 @@ process DOWNLOAD_GENOMES {
         'docker://genomicmedicinesweden/gmsmetapost-download-genomes:latest' }"
 
     input:
-    val(meta)  // e.g. 'sample':'SRR12875558_se-SRR12875558', 'pairing':'single_end', 'taxon':'Iris severe mosaic virus', 'taxid':'32620'
+    tuple val(meta), path(fastq)
 
     output:
-    tuple val(meta), path('*.fna')  , emit: fna
-    path "versions.yml"             , emit: versions
+    tuple val(meta), path(fastq), path('*.fna'), emit: fna
+    path "versions.yml"                        , emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """
