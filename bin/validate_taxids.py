@@ -58,7 +58,7 @@ def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Download reference genome using a taxid",
-        epilog="Example: python download_ref_genome.py 11665",
+        epilog="Example: python validate_taxids.py 11665",
     )
     parser.add_argument(
         "taxid",
