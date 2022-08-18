@@ -1,4 +1,5 @@
 process MINIMAP2_INDEX {
+    tag "$fasta"
     label 'process_medium'
 
     conda (params.enable_conda ? 'bioconda::minimap2=2.21' : null)
