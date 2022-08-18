@@ -22,7 +22,7 @@ include { GMSMETAPOST } from './workflows/gmsmetapost'
 //
 // WORKFLOW: Run main nf-core/gmsmetapost analysis pipeline
 //
-workflow NFCORE_GMSMETAPOST {
+workflow GMSMETAPOST {
     GMSMETAPOST ()
 }
 
@@ -37,7 +37,7 @@ workflow NFCORE_GMSMETAPOST {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    NFCORE_GMSMETAPOST ()
+    GMSMETAPOST ()
 }
 
 /*

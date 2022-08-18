@@ -7,19 +7,19 @@ process REMOVE_MISSING_TAXIDS {
         'docker://genomicmedicinesweden/gmsmetapost-download-genomes:latest' }"
 
     input:
-    tuple val(meta), path(tsv), path(txt)
+    tuple val(meta), path(fastq), path(txt)
 
     output:
-    tuple val(meta), path('*.validated.tsv') , emit: tsv
-    path "versions.yml"                      , emit: versions
+    tuple val(meta), path(fastq), path('*.validated.tsv'), emit: tsv
+    path "versions.yml"                                  , emit: versions
 
     script:
     """
-    cp $tsv bak.tsv
+    cp $meta.path bak.tsv
     cat $txt \
-    | parallel --jobs 1 --verbose \"sed -i '/\t{}\t/d' $tsv\"
-    mv $tsv ${meta.sample}.validated.tsv
-    mv bak.tsv $tsv
+    | parallel --jobs 1 --verbose \"sed -i '/\t{}\t/d' $meta.path\"
+    mv $meta.path ${meta.sample}.validated.tsv
+    mv bak.tsv $meta.path
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

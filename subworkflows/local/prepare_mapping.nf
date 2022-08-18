@@ -4,7 +4,6 @@
 include { VALIDATE_TAXIDS        } from '../../modules/local/validate_taxids'
 include { REMOVE_MISSING_TAXIDS  } from '../../modules/local/remove_missing_taxids'
 include { DOWNLOAD_GENOMES       } from '../../modules/local/download_genomes'
-include { ADD_METADATA           } from '../../modules/local/add_metadata'
 
 
 workflow PREPARE_MAPPING {
@@ -29,31 +28,35 @@ workflow PREPARE_MAPPING {
     ch_taxids_validated = REMOVE_MISSING_TAXIDS( ch_excludable )
     ch_versions = ch_versions.mix(REMOVE_MISSING_TAXIDS.out.versions)
     // ch_taxids_validated[0].dump(tag:'validated')
-    ch_metadata_added = ADD_METADATA( ch_taxids_validated.tsv )
-    ch_versions = ch_versions.mix(ADD_METADATA.out.versions)
-    // ch_metadata_added[0].dump(tag:'meta_data_added')
 
-    ch_split = ch_metadata_added[0].splitCsv( header:true, sep:'\t' )
-                            .map { row ->
-                                    def meta = [:]
-                                    meta.sample    = row.sample_name[1]
-                                    meta.pairing   = row.pairing[1]
-                                    meta.taxon     = row.taxon_name[1]
-                                    meta.taxid     = row.taxid[1]
-                                    meta
+    ch_split = ch_taxids_validated[0]
+                        .map { it ->
+                                    def new_meta = [:]
+                                    new_meta = it[0]
+                                    new_meta.remove('path')
+                                    [new_meta, it[1], it[2]]
                                 }
+    // ch_split.dump(tag: "split_meta")
+    ch_parsed = ch_split.splitCsv( header:true, sep:'\t' )
+                                .map{ meta_data, fastq, row ->
+                                    def meta = [:]
+                                    meta.taxon     = row.taxon_name
+                                    meta.taxid     = row.taxid
+                                    [meta_data + meta, fastq]
+                                }
+    // ch_parsed.dump(tag: "split_parsed")
 
-    ch_ref_genomes = DOWNLOAD_GENOMES( ch_split )
+    ch_ref_genomes = DOWNLOAD_GENOMES( ch_parsed )
     // ch_ref_genomes[0].dump(tag: 'ref')
     ch_versions = ch_versions.mix(DOWNLOAD_GENOMES.out.versions)
 
 
     emit:
-    tsv = DOWNLOAD_GENOMES.out.fna    // channel: [ val(meta), [ hits ] ]
+    fna = ch_ref_genomes.fna    // channel: [ val(meta), path(fna) ]
     versions = ch_versions            // channel: [ versions.yml ]
 }
 
-// Function to get list of [ meta, [ kraken2, centrifuge, kaiju ] ]
+
 def create_tsv_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
@@ -64,6 +67,23 @@ def create_tsv_channel(LinkedHashMap row) {
     if (!file(row.path).exists()) {
         exit 1, "ERROR: Please check input sheet -> classification results file does not exist!\n${row.path}"
     }
-    array = [ meta, file(row.path) ]
-    return array
+    meta.path = file(row.path)
+    if (row.pairing == "single_end") {
+        if (row.read2) {
+            exit 1, "ERROR: Please check input sheet -> for single end reads there should not be any reverse read!\n${row.read2}"
+        }
+        if (!file(row.read1).exists()) {
+            exit 1, "ERROR: Please check input sheet -> the single end reads file seems to not exist!\n${row.read1}"
+        }
+        array = [ meta, [file(row.read1)] ]
+        return array
+    }
+    if (row.pairing == "paired_end") {
+        if (!file(row.read1).exists() || !file(row.read2).exists()) {
+            exit 1, "ERROR: Please check input sheet -> the one or both of the reads files seems not to exist!\n${row.read1},${row.read2}"
+        }
+        array = [ meta, [file(row.read1), file(row.read2)] ]
+        return array
+    }
+    exit 1, "ERROR: Please check input sheet -> the pairing column value doesn't seem to be one of 'single_end' or 'paired_end'!\n${row.pairing}"
 }
