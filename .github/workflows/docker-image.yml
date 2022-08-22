@@ -2,8 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches:
-      - dev
+    branches: [ dev ]
 
 jobs:
 
@@ -32,7 +31,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:conf/environments/download_genomes"
+          context: .
+          file: conf/environments/download_genomes/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gmsmetapost:latest
+          tags: genomicmedicinesweden/gmsmetapost:latest
           platforms: linux/amd64
