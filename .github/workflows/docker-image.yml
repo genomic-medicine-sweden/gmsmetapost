@@ -2,11 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches:
-      - 'dev'
-  pull_request:
-    branches:
-      - 'dev'
+    branches: [ dev ]
 
 jobs:
 
@@ -18,7 +14,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -35,8 +31,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v3
         with:
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gmsmetapost-download-genomes:latest
           context: .
           file: conf/environments/download_genomes/Dockerfile
+          push: true
+          tags: genomicmedicinesweden/gmsmetapost:latest
           platforms: linux/amd64
