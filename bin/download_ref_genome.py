@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Optional
 import shutil
 from pydantic import BaseModel, validator
+from os import remove
 
 
 logger = logging.getLogger()
@@ -226,20 +227,41 @@ def extract_assembly_file_path(assembly_path_dir: Path) -> Path:
     )
 
 
-def copy_assembly_file(assembly_path: Path, path_to_move_assembly_to: Path) -> None:
+def copy_assembly_file(assembly_path: Path, path_to_move_assembly_to: Path) -> bool:
     """Copy assembly from its original directory to another location
 
     Args:
         assembly_path (Path): Directory where the assembly (.fna) file resides
         path_to_move_assembly_to (Path): Directory to which the assembly file should be copied
+
+    Raises:
+        FileNotFoundError: Error raised when no '.fna' file was successfully copied
+
+    Returns:
+        bool: True if the assembly (.fna) file was successfully copied
     """
     if assembly_path.is_file():
         shutil.copy(assembly_path, path_to_move_assembly_to)
         logger.info(
             "Copying %s to: %s", str(assembly_path), str(path_to_move_assembly_to)
         )
+        return True
+    raise FileNotFoundError(f"No '.fna' file could be found: {str(assembly_path)}")
+
+
+def remove_artifacts(artifact_path: Path, is_file: bool = True) -> None:
+    """Remove artefact file or non-empty directory
+
+    Args:
+        artifact_path (Path): Path to the artifact file or directory
+        is_file (bool, optional): Is the file directory?. Defaults to True.
+    """
+    if is_file:
+        remove(artifact_path)
+        logger.info("File successfully removed: %s\n", artifact_path)
     else:
-        raise FileNotFoundError(f"No '.fna' file could be found: {str(assembly_path)}")
+        shutil.rmtree(artifact_path)
+        logger.info("Directory successfully removed: %s\n", artifact_path)
 
 
 def main(argv=None):
@@ -265,6 +287,7 @@ def main(argv=None):
         download_succeeded = False
 
     if download_succeeded:
+        zip_file = Path(f"{taxid}.zip")
         unzip(Path(f"{taxid}.zip"))
         assemblies: list[Assembly] = sort_assemblies(open_jsonl_file(args.jsonl_file))
         # Handle the case if the latest assembly doesn't contain an assembly .fna file
@@ -281,7 +304,9 @@ def main(argv=None):
                 continue
             break
         if assembly_path_checked:
-            copy_assembly_file(assembly_path_checked, Path.cwd())
+            if copy_assembly_file(assembly_path_checked, Path.cwd()):
+                remove_artifacts(Path.cwd() / zip_file)
+                remove_artifacts(Path.cwd() / "ncbi_dataset", is_file=False)
         else:
             logger.error("No assembly files were found for taxid: %s", taxid)
 
