@@ -22,7 +22,7 @@ include { GMSMETAPOST } from './workflows/gmsmetapost'
 //
 // WORKFLOW: Run main nf-core/gmsmetapost analysis pipeline
 //
-workflow GMSMETAPOST {
+workflow GMS_METAPOST {
     GMSMETAPOST ()
 }
 
