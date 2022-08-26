@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: conf/environments/download_genomes/Dockerfile
+          file: conf/environments/Dockerfile
           push: true
           tags: genomicmedicinesweden/gmsmetapost:latest
           platforms: linux/amd64

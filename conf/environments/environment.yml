@@ -1,0 +1,11 @@
+name: general
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - blast = 2.13.0
+  # Type hinting with e.g. list instead of typing.List requires >= 3.9
+  - python >= 3.9
+  - parallel = 20220722
+  - pandas = 1.4.3
