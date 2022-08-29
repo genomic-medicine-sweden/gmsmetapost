@@ -11,7 +11,7 @@ process RETRIEVE_SEQS {
 
     output:
     tuple val(meta), path(fastq), path(blastdb), path('*.fna'), emit: fna
-    path "versions.yml"                                        , emit: versions
+    path "versions.yml"                                       , emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """

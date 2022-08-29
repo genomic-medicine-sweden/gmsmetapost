@@ -3,13 +3,14 @@
 // import modules
 include { VALIDATE_TAXIDS        } from '../../modules/local/validate_taxids'
 include { REMOVE_MISSING_TAXIDS  } from '../../modules/local/remove_missing_taxids'
-include { DOWNLOAD_GENOMES       } from '../../modules/local/download_genomes'
+include { RETRIEVE_SEQS       } from '../../modules/local/retrieve_seqs'
 
 
 workflow PREPARE_MAPPING {
 
     take:
     classifier_metadata      // params.filtered_hits
+    blast_db                 // params.blast_db
 
 
     main:
@@ -18,42 +19,53 @@ workflow PREPARE_MAPPING {
     ch_filtered_hits = Channel.fromPath(classifier_metadata)
                             .splitCsv ( header:true )
                             .map { create_tsv_channel(it) }
-    // ch_filtered_hits.dump(tag: "test")
+    // ch_filtered_hits.dump(tag: "samples")
 
+    ch_blast_db = Channel.fromPath(blast_db)
+    // ch_blast_db.dump(tag: "blast_db")
+    ch_prep_for_validation = ch_filtered_hits.combine(ch_blast_db)
 
-    ch_not_found_taxids = VALIDATE_TAXIDS( ch_filtered_hits )
+    // ch_prep_for_validation.dump(tag: "pre_val")
+    ch_not_found_taxids = VALIDATE_TAXIDS( ch_prep_for_validation )
     ch_versions = ch_versions.mix(VALIDATE_TAXIDS.out.versions)
     // ch_not_found_taxids[0].dump(tag:'unvalidated')
-    ch_excludable = ch_filtered_hits.combine(ch_not_found_taxids.txt, by:0) //.dump(tag:'combined')
+    ch_excludable = ch_prep_for_validation.combine(ch_not_found_taxids.txt, by:0) //.dump(tag:'combined')
     ch_taxids_validated = REMOVE_MISSING_TAXIDS( ch_excludable )
     ch_versions = ch_versions.mix(REMOVE_MISSING_TAXIDS.out.versions)
     // ch_taxids_validated[0].dump(tag:'validated')
 
     ch_split = ch_taxids_validated[0]
-                        .map { it ->
+                        .multiMap { it ->
                                     def new_meta = [:]
                                     new_meta = it[0]
-                                    new_meta.remove('path')
-                                    [new_meta, it[1], it[2]]
+                                    new_meta.remove('path') // Drop unvalidated tsv from meta.
+                                    tsv : [new_meta, it[3]] // val(meta), path(validated.tsv)
+                                    meta_data: [new_meta, it[1], it[2]] // val(meta), path(fastq), path(blast_db)
                                 }
-    // ch_split.dump(tag: "split_meta")
-    ch_parsed = ch_split.splitCsv( header:true, sep:'\t' )
-                                .map{ meta_data, fastq, row ->
+    // ch_split.tsv.dump(tag: "split_meta_tsv")
+    // ch_split.meta_data.dump(tag: "split_meta_data")
+    ch_parsed = ch_split.tsv.splitCsv( header:true, sep:'\t' )
+                                .map{ meta_data, row ->
                                     def meta = [:]
-                                    meta.taxon     = row.taxon_name
-                                    meta.taxid     = row.taxid
-                                    [meta_data + meta, fastq]
+                                    meta.taxon = row.taxon_name
+                                    meta.taxid = row.taxid
+                                    [meta_data, meta_data + meta]   // Split by rows the tsv and include in meta the taxon name and taxid,
+                                                                    // keep the old meta data so that it can be used for joining with the
+                                                                    // channel with path(fastq) and path(blast_db).
+                                }
+                                .combine(ch_split.meta_data, by: 0) // Join path(fastq) and path(blast_db) to the meta data channel
+                                .map{ it ->                         // Drop the old meta data since the new one contains same data and even more.
+                                    [it[1], it[2], it[3]]           // val(new_meta), path(fastq), path(blast_db)
                                 }
     // ch_parsed.dump(tag: "split_parsed")
-
-    ch_ref_genomes = DOWNLOAD_GENOMES( ch_parsed )
-    // ch_ref_genomes[0].dump(tag: 'ref')
-    ch_versions = ch_versions.mix(DOWNLOAD_GENOMES.out.versions)
+    ch_ref_genomes = RETRIEVE_SEQS( ch_parsed )
+    // ch_ref_genomes.fna.dump(tag: 'ref')
+    ch_versions = ch_versions.mix(RETRIEVE_SEQS.out.versions)
 
 
     emit:
-    fna = ch_ref_genomes.fna    // channel: [ val(meta), path(fna) ]
-    versions = ch_versions            // channel: [ versions.yml ]
+    fna      = ch_ref_genomes.fna  // channel: [ val(meta), path(fastq), path(blastdb), path('*.fna') ]
+    versions = ch_versions         // channel: path(versions.yml)
 }
 
 
