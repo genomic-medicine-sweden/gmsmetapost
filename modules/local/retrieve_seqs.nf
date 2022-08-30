@@ -4,7 +4,7 @@ process RETRIEVE_SEQS {
     conda (params.enable_conda ? "conda-forge::python>=3.9 " : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'library://ljmesi/gmsmetapost/general:20220825' :
-        'docker://genomicmedicinesweden/gmsmetapost:latest' }"
+        'genomicmedicinesweden/gmsmetapost:latest' }"
 
     input:
     tuple val(meta), path(fastq), path(blastdb)
