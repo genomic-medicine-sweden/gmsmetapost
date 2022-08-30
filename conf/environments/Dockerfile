@@ -9,7 +9,9 @@ RUN /opt/conda/bin/conda update conda && \
     /opt/conda/bin/mamba env create -f /environment.yml
 
 FROM debian:buster-slim
-RUN apt-get clean -y
+RUN apt-get update \
+    && apt-get install -y git procps \
+    && apt-get clean -y
 COPY --from=condabuild /opt/conda/envs/general /opt/conda/envs/general
 ENV PATH=/opt/conda/envs/general/bin:$PATH
 ENV LC_ALL C.UTF-8
