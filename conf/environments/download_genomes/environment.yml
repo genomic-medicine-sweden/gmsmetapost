@@ -1,12 +1,10 @@
-name: download_genomes
+name: general
 channels:
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
-  # Used for retrieving genomes from NCBI
-  - ncbi-datasets-cli = 13.35.0
-  # Used for parsing "datasets download genome taxon" output .jsonl files
-  - pydantic = 1.9.1
+  - blast = 2.13.0
   # Type hinting with e.g. list instead of typing.List requires >= 3.9
   - python >= 3.9
   - parallel = 20220722

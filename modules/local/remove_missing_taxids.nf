@@ -4,7 +4,7 @@ process REMOVE_MISSING_TAXIDS {
     conda (params.enable_conda ? "conda-forge::python>=3.9 conda-forge::pydantic=1.9.1 conda-forge::ncbi-datasets-cli=13.35.0 conda-forge::parallel=20220722 " : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'library://ljmesi/gmsmetapost/datasets_pydantic:20220815' :
-        'docker://genomicmedicinesweden/gmsmetapost:latest' }"
+        'genomicmedicinesweden/gmsmetapost:latest' }"
 
     input:
     tuple val(meta), path(fastq), path(txt)
