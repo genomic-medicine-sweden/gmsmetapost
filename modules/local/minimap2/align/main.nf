@@ -24,9 +24,10 @@ process MINIMAP2_ALIGN {
 
     script:
     def args = task.ext.args ?: ''
+    def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample}_${meta.taxid}"
     def input_reads = meta.pairing == "single_end" ? "$reads" : "${reads[0]} ${reads[1]}"
-    def bam_output = bam_format ? "-a | samtools sort | samtools view -@ ${task.cpus} -b -h -o ${prefix}.bam" : "-o ${prefix}.paf"
+    def bam_output = bam_format ? "-a | samtools sort | samtools view -@ ${task.cpus} ${args2} -b -h -o ${prefix}.bam" : "-o ${prefix}.paf"
     def cigar_paf = cigar_paf_format && !bam_format ? "-c" : ''
     def set_cigar_bam = cigar_bam && bam_format ? "-L" : ''
     """

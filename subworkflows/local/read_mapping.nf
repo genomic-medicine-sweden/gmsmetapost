@@ -2,9 +2,9 @@
 
 // import modules
 include { BWA_INDEX      } from '../../modules/local/bwa/index/main'
-include { BWA_MEM        } from '../../modules/nf-core/modules/bwa/mem/main'
+include { BWA_MEM        } from '../../modules/local/bwa/mem/main'
 include { MINIMAP2_INDEX } from '../../modules/local/minimap2/index/main'
-include { MINIMAP2_ALIGN } from '../../modules/nf-core/modules/minimap2/align/main'
+include { MINIMAP2_ALIGN } from '../../modules/local/minimap2/align/main'
 
 
 workflow READ_MAPPING {
@@ -56,7 +56,7 @@ workflow READ_MAPPING {
     // ch_input_for_pe_mapping.reads.dump(tag: "reads")
     // ch_input_for_pe_mapping.index.dump(tag: "index")
 
-    ch_mapped_pe_reads = BWA_MEM( ch_input_for_pe_mapping.reads, ch_input_for_pe_mapping.index, ["sort"] )
+    ch_mapped_pe_reads = BWA_MEM( ch_input_for_pe_mapping.reads, ch_input_for_pe_mapping.index, "sort | samtools view" )
     ch_versions = ch_versions.mix(BWA_MEM.out.versions)
     // ch_mapped_pe_reads.bam.dump(tag: "bam_pe")
 
