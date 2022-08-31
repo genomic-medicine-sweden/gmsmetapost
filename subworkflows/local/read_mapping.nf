@@ -2,23 +2,22 @@
 
 // import modules
 include { BWA_INDEX      } from '../../modules/local/bwa/index/main'
-include { BWA_MEM        } from '../../modules/nf-core/modules/bwa/mem/main'
+include { BWA_MEM        } from '../../modules/local/bwa/mem/main'
 include { MINIMAP2_INDEX } from '../../modules/local/minimap2/index/main'
-include { MINIMAP2_ALIGN } from '../../modules/nf-core/modules/minimap2/align/main'
+include { MINIMAP2_ALIGN } from '../../modules/local/minimap2/align/main'
 
 
 workflow READ_MAPPING {
 
     take:
-    reads      // [ [ meta ], [ reads], reference_assembly ]
+    reads      // [ val(meta), path(fastq), path(blastdb), path('*.fna') ]
 
     main:
     ch_versions = Channel.empty()
-
     ch_input_for_indexing = reads
                 .map {
-                      it ->
-                      [ it[0], it[2] ] // val(meta), path(fasta)
+                      it ->            // Drop unneeded elements in the tuple
+                      [ it[0], it[3] ] // val(meta), path(fasta)
                 }
                 .branch {
                 se: it[0]['pairing'] == 'single_end'
@@ -39,8 +38,8 @@ workflow READ_MAPPING {
 
     ch_prep_for_mapping = reads
                 .map {
-                      it ->
-                      [ it[0], it[1] ] // val(meta), path(reads)
+                      it ->            // Drop unneeded elements in the tuple so that cardinality is preserved for BWA_MEM
+                      [ it[0], it[1] ] // val(meta), path(fastq)
                 }
                 .branch {
                 se: it[0]['pairing'] == 'single_end'
@@ -51,21 +50,21 @@ workflow READ_MAPPING {
                             .join(ch_bwa_index.index, by:0)
                             .multiMap { it ->
                                 reads: [ it[0], it[1] ] // tuple val(meta), path(reads)
-                                index: it[2] // path  index
+                                index: it[2]            // path  index
                             }
 
     // ch_input_for_pe_mapping.reads.dump(tag: "reads")
     // ch_input_for_pe_mapping.index.dump(tag: "index")
 
-    ch_mapped_pe_reads = BWA_MEM( ch_input_for_pe_mapping.reads, ch_input_for_pe_mapping.index, ["sort"] )
+    ch_mapped_pe_reads = BWA_MEM( ch_input_for_pe_mapping.reads, ch_input_for_pe_mapping.index, "sort | samtools view" )
     ch_versions = ch_versions.mix(BWA_MEM.out.versions)
     // ch_mapped_pe_reads.bam.dump(tag: "bam_pe")
 
     ch_input_for_se_mapping = ch_prep_for_mapping.se
-                            .join(ch_minimap2_index.index, by:0)
+                            .join( ch_minimap2_index.index, by:0 )
                             .multiMap { it ->
                                 reads: [ it[0], it[1] ] // tuple val(meta), path(reads)
-                                index: it[2] // path reference
+                                index: it[2]            // path index
                             }
 
     // ch_input_for_se_mapping.reads.dump(tag: "reads_se")
@@ -75,7 +74,13 @@ workflow READ_MAPPING {
     ch_versions = ch_versions.mix(MINIMAP2_ALIGN.out.versions)
     // ch_mapped_se_reads.bam.dump(tag: "bam_se")
 
+
+    ch_aligned_reads = ch_mapped_se_reads.bam
+                                        .concat( ch_mapped_pe_reads.bam ) // Join into one channel all the bam files
+                                        .join( reads, by:0 )              // Join by meta data: path(fastq), path(blastdb) into the channel
+    // ch_aligned_reads.dump(tag: "aligned_reads_final")
+
     emit:
-    fna = ch_mapped_pe_reads.bam  // channel: [ val(meta), path(fna) ]
-    versions = ch_versions        // channel: [ versions.yml ]
+    bwa      = ch_aligned_reads  // channel: [ val(meta), path(bam), path(blastdb), path(fna) ]
+    versions = ch_versions       // channel: [ versions.yml ]
 }
