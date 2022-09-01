@@ -74,7 +74,7 @@ workflow GMSMETAPOST {
     )
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
-    ch_ref_downloaded = PREPARE_MAPPING( params.filtered_hits )
+    ch_ref_downloaded = PREPARE_MAPPING( params.filtered_hits, params.blast_db )
     READ_MAPPING( ch_ref_downloaded.fna )
 
 
