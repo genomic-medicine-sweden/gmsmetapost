@@ -138,7 +138,7 @@ def add_rpm_column(
     Returns:
         pd.DataFrame: DataFrame where the RPM column is added
     """
-    df["RPM"] = df.apply(lambda row: row[col_name] / col_sum_per_million, axis=1)
+    df["RPM"] = df.apply(lambda row: row[col_name] * col_sum_per_million, axis=1)
     df["RPM"] = df.apply(lambda row: round(row["RPM"], 1), axis=1)
     return df
 
