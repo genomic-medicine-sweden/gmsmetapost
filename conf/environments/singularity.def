@@ -3,11 +3,11 @@ From:continuumio/miniconda3:4.12.0
 
 %labels
 	MAINTAINER Lauri Mesilaakso <lauri.mesilaakso@regionostergotland.se>
-	DESCRIPTION Container for downloading genomes based on taxids in a tsv file
+	DESCRIPTION Container for general use with gmsmetapost
 	VERSION 0.1.0
 
 %environment
-    export PATH="/opt/conda/envs/download_genomes/bin:$PATH"
+    export PATH="/opt/conda/envs/general/bin:$PATH"
     export LC_ALL=C.UTF-8
     export LANG=C.UTF-8
 
@@ -25,5 +25,5 @@ From:continuumio/miniconda3:4.12.0
     rm -rf /var/lib/apt/lists/\* /tmp/\* /var/tmp/*
 
 %runscript
-    . /opt/conda/bin/activate download_genomes
+    . /opt/conda/bin/activate general
 	exec "$@"
