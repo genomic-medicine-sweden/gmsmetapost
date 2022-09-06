@@ -18,7 +18,7 @@ workflow PREPARE_MAPPING {
 
     ch_filtered_hits = Channel.fromPath(classifier_metadata)
                             .splitCsv ( header:true )
-                            .map { create_tsv_channel(it) }
+                            .map { create_fastq_channel(it) }
     // ch_filtered_hits.dump(tag: "samples")
 
     ch_blast_db = Channel.fromPath(blast_db)
@@ -69,7 +69,7 @@ workflow PREPARE_MAPPING {
 }
 
 
-def create_tsv_channel(LinkedHashMap row) {
+def create_fastq_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
     meta.sample    = row.sample
