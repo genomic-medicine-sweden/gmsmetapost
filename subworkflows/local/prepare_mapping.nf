@@ -68,34 +68,50 @@ workflow PREPARE_MAPPING {
     versions = ch_versions         // channel: path(versions.yml)
 }
 
+// Function to create path to fastq files corresponding classifier tsv file
+// the function assumes that the classifier tsv file is named e.g.:
+// assets/SRR12875558_se-SRR12875558.tsv or e.g.
+// assets/SRR12875570_pe-SRR12875570.tsv
+def create_path(String accession_id, boolean single_end, String assets_path = "assets/"){
+    def path = ""
+    if (single_end){
+        path = assets_path + accession_id + "_se-" + accession_id + ".tsv"
+    } else {
+        path = assets_path + accession_id + "_pe-" + accession_id + ".tsv"
+    }
+    return file(path)
+}
 
+// Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
 def create_fastq_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
-    meta.sample    = row.sample
-    meta.pairing   = row.pairing
+    meta.sample                 = row.sample
+    meta.instrument_platform    = row.instrument_platform
 
-    def array = []
-    if (!file(row.path).exists()) {
-        exit 1, "ERROR: Please check input sheet -> classification results file does not exist!\n${row.path}"
-    }
-    meta.path = file(row.path)
-    if (row.pairing == "single_end") {
-        if (row.read2) {
-            exit 1, "ERROR: Please check input sheet -> for single end reads there should not be any reverse read!\n${row.read2}"
+    def run_accession = row.run_accession
+    def fastq_meta = []
+
+    if (meta.instrument_platform == 'OXFORD_NANOPORE') {
+        if (row.fastq_2 != '') {
+            exit 1, "ERROR: Please check input samplesheet -> For 'instrument_platform' OXFORD_NANOPORE Read 2 FastQ should be empty!\n${row.fastq_2}"
         }
-        if (!file(row.read1).exists()) {
-            exit 1, "ERROR: Please check input sheet -> the single end reads file seems to not exist!\n${row.read1}"
+        meta.pairing = "single_end"
+        meta.path    = create_path(run_accession, true)
+        fastq_meta   = [ meta, [ file(row.fastq_1) ] ]
+        return fastq_meta
+    } else if (meta.instrument_platform == 'ILLUMINA') {
+        if (row.fastq_2 == '') {
+            exit 1, "ERROR: Please check input samplesheet -> For 'instrument_platform' ILLUMINA Read 2 FastQ should not be empty!\n${row.fastq_2}"
         }
-        array = [ meta, [file(row.read1)] ]
-        return array
-    }
-    if (row.pairing == "paired_end") {
-        if (!file(row.read1).exists() || !file(row.read2).exists()) {
-            exit 1, "ERROR: Please check input sheet -> the one or both of the reads files seems not to exist!\n${row.read1},${row.read2}"
+        if (!file(row.fastq_2).exists()) {
+                exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
         }
-        array = [ meta, [file(row.read1), file(row.read2)] ]
-        return array
+        meta.pairing = "paired_end"
+        meta.path    = create_path(run_accession, false)
+        fastq_meta   = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
+        return fastq_meta
+    } else {
+        exit 1, "ERROR: Please check input sheet -> 'instrument_platform' value doesn't seem to be one of 'OXFORD_NANOPORE' or 'ILLUMINA'!\n${row.instrument_platform}"
     }
-    exit 1, "ERROR: Please check input sheet -> the pairing column value doesn't seem to be one of 'single_end' or 'paired_end'!\n${row.pairing}"
 }
