@@ -65,6 +65,12 @@ nextflow run main.nf \
 
 `conda` profile can also be replaced by `singularity` or `docker`.
 
+## Troubleshooting 
+
+* If you get the following error message: ```no space left on device```, make sure that that you are using: 
+
+  ```singularity.cacheDir   = "/path/to/cache"```
+
 ## Acknowledgements
 
 This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
