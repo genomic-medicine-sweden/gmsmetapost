@@ -9,21 +9,21 @@ include { RETRIEVE_SEQS       } from '../../modules/local/retrieve_seqs'
 workflow PREPARE_MAPPING {
 
     take:
-    classifier_metadata      // params.filtered_hits
+    classifier_metadata      // params.fastq_data
     blast_db                 // params.blast_db
 
 
     main:
     ch_versions = Channel.empty()
 
-    ch_filtered_hits = Channel.fromPath(classifier_metadata)
+    ch_fastq_data = Channel.fromPath(classifier_metadata)
                             .splitCsv ( header:true )
                             .map { create_tsv_channel(it) }
-    // ch_filtered_hits.dump(tag: "samples")
+    // ch_fastq_data.dump(tag: "samples")
 
     ch_blast_db = Channel.fromPath(blast_db)
     // ch_blast_db.dump(tag: "blast_db")
-    ch_prep_for_validation = ch_filtered_hits.combine(ch_blast_db)
+    ch_prep_for_validation = ch_fastq_data.combine(ch_blast_db)
 
     // ch_prep_for_validation.dump(tag: "pre_val")
     ch_not_found_taxids = VALIDATE_TAXIDS( ch_prep_for_validation )
