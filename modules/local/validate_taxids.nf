@@ -10,7 +10,7 @@ process VALIDATE_TAXIDS {
     tuple val(meta), path(tsv), path(blastdb)
 
     output:
-    tuple val(meta), path('excludable_taxids.txt'), emit: txt
+    tuple val(meta), path('*excludable_taxids.txt'), emit: txt
     path "versions.yml"                           , emit: versions
 
     script:
@@ -29,7 +29,7 @@ process VALIDATE_TAXIDS {
 
     cat $meta.path \
     | parallel --header : --colsep '\t' \
-    blast_retrieve {taxid} >> excludable_taxids.txt
+    blast_retrieve {taxid} >> ${meta.sample}_excludable_taxids.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
