@@ -7,7 +7,7 @@ process VALIDATE_TAXIDS {
         'genomicmedicinesweden/gmsmetapost:latest' }"
 
     input:
-    tuple val(meta), path(tsv), path(blastdb)
+    tuple val(meta), path(fastq), path(blastdb)
 
     output:
     tuple val(meta), path('*excludable_taxids.txt'), emit: txt
