@@ -71,6 +71,15 @@ nextflow run main.nf \
 
   ```singularity.cacheDir   = "/path/to/cache"```
 
+* If you get the following error message for `singularity`:
+  
+  ```FATAL:   While getting image info: error decoding image: invalid ObjectId in JSON```
+  
+  You are likely using an older version of singularity. You can update it with the command:
+  
+  ```conda install -c conda-forge singularity```
+
+
 ## Acknowledgements
 
 This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
