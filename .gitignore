@@ -6,3 +6,5 @@ results/
 testing/
 testing*
 *.pyc
+assets/SRR12875558_se-SRR12875558.tsv
+assets/SRR12875570_pe-SRR12875570.tsv
