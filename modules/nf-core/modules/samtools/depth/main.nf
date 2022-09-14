@@ -1,5 +1,5 @@
 process SAMTOOLS_DEPTH {
-    tag "$meta.id"
+    tag "$meta.sample, $meta.taxon: $meta.taxid"
     label 'process_low'
 
     conda (params.enable_conda ? "bioconda::samtools=1.15.1" : null)
@@ -19,7 +19,7 @@ process SAMTOOLS_DEPTH {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.sample}.${meta.taxid}"
     """
     samtools \\
         depth \\

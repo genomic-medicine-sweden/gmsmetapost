@@ -38,6 +38,7 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 include { INPUT_CHECK     } from '../subworkflows/local/input_check'
 include { PREPARE_MAPPING } from '../subworkflows/local/prepare_mapping'
 include { READ_MAPPING    } from '../subworkflows/local/read_mapping'
+include { GENERATE_PLOTS  } from '../subworkflows/local/generate_plots'
 
 
 /*
@@ -75,9 +76,9 @@ workflow GMSMETAPOST {
     ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
     ch_ref_downloaded = PREPARE_MAPPING( params.fastq_data, params.blast_db )
-    READ_MAPPING( ch_ref_downloaded.fna )
+    ch_bam = READ_MAPPING( ch_ref_downloaded.fna )
 
-
+    GENERATE_PLOTS( ch_bam.bwa )
 
 
 
