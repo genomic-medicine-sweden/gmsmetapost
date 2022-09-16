@@ -9,3 +9,4 @@ dependencies:
   - python >= 3.9
   - parallel = 20220722
   - pandas = 1.4.3
+  - taxonkit = 0.12.0
