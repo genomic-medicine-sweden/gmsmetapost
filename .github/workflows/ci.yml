@@ -1,0 +1,46 @@
+name: gmsmetapost CI
+# This workflow runs the pipeline with the minimal test dataset to check that it completes without any syntax errors
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+  release:
+    types: [published]
+
+env:
+  NXF_ANSI_LOG: false
+
+jobs:
+  test:
+    name: Run pipeline with test data
+    # Only run on push if this is the dev branch (merged PRs)
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == ' Genomic-Medicine-Linkoping/implement_ci_test') }}"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        NXF_VER:
+          - "21.10.3"
+          - "latest-everything"
+
+    steps:
+      - name: Check out pipeline code
+        uses: actions/checkout@v2
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v1
+        with:
+          version: "${{ matrix.NXF_VER }}"
+
+      - name: Show current locale
+        run: locale
+
+      - name: Set UTF-8 enabled locale
+        run: |
+          sudo locale-gen en_US.UTF-8
+          sudo update-locale LANG=en_US.UTF-8
+      - name: Run pipeline with test data
+        uses: Wandalen/wretry.action@v1.0.11
+        with:
+          command: nextflow run ${GITHUB_WORKSPACE} -profile docker --outdir ./results --input assets/samplesheet.csv --fastq_data assets/ci/samples_ci.csv --assets assets/ci --blast_db assets/ci/1511916_blastdb
+          attempt_limit: 3
