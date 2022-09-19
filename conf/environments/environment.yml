@@ -10,3 +10,4 @@ dependencies:
   - parallel = 20220722
   - pandas = 1.4.3
   - taxonkit = 0.12.0
+  - biopython >= 1.79
