@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - implement_ci_test
   pull_request:
   release:
     types: [published]
