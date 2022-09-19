@@ -34,5 +34,6 @@ jobs:
           context: .
           file: conf/environments/Dockerfile
           push: true
-          tags: genomicmedicinesweden/gmsmetapost:latest
+          #tags: genomicmedicinesweden/gmsmetapost:latest
+          tags: sofsta/gmsmetapost:latest
           platforms: linux/amd64
