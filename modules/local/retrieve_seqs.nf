@@ -20,7 +20,9 @@ process RETRIEVE_SEQS {
     -db nt \
     -taxids $meta.taxid \
     -dbtype nucl) \
-    > ${meta.taxid}_${meta.sample}.fna
+    > temp.fna
+    pick_a_genome.py temp.fna ${meta.taxid}_${meta.sample}.fna
+    rm temp.fna
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
