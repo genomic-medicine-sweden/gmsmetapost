@@ -43,5 +43,5 @@ jobs:
       - name: Run pipeline with test data
         uses: Wandalen/wretry.action@v1.0.11
         with:
-          command: nextflow run ${GITHUB_WORKSPACE} -profile docker --outdir ./results --input assets/samplesheet.csv --fastq_data assets/ci/samples_ci.csv --assets assets/ci --blast_db assets/ci/1511916_blastdb
+          command: nextflow run ${GITHUB_WORKSPACE}/main.nf -profile docker --outdir ./results --input assets/samplesheet.csv --fastq_data assets/ci/samples_ci.csv --assets assets/ci --blast_db assets/ci/1511916_blastdb
           attempt_limit: 3
