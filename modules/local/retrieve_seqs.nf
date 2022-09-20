@@ -2,9 +2,12 @@ process RETRIEVE_SEQS {
     tag "$meta.sample, $meta.taxon: $meta.taxid"
 
     conda (params.enable_conda ? "conda-forge::python>=3.9 bioconda::blast=2.13.0 " : null)
+//    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+//        'library://ljmesi/gmsmetapost/general:20220901' :
+//        'genomicmedicinesweden/gmsmetapost:latest' }"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'library://ljmesi/gmsmetapost/general:20220901' :
-        'genomicmedicinesweden/gmsmetapost:latest' }"
+        'library://sofstam/gmsmetapost/gmsmetapost:latest' :
+        'sofstam/gmsmetapost:latest' }"
 
     input:
     tuple val(meta), path(fastq), path(blastdb)
