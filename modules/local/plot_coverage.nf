@@ -1,13 +1,12 @@
 process PLOT_COVERAGE {
-    tag "${meta.sample}" // DOUBLE CHECK THIS BIT
+    tag "$meta.sample, $meta.taxon"
 
-    conda (params.enable_conda ? "conda-forge::r conda-forge::r-tidyverse conda-forge::r-plotly" : null)
-   // container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?  
-   //     'https://depot.galaxyproject.org/singularity/r-tidyverse:1.2.1' :
-   //     'quay.io/biocontainers/r-tidyverse:1.2.1' }"
-    // UPDATE CONTAINERS
+    conda (params.enable_conda ? "conda-forge::r-base conda-forge::r-tidyverse conda-forge::r-plotly conda-forge::r-hrbrthemes conda-forge::r-htmltools" : null)
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?  
+        'library://sofstam/gmsmetapost/gmsmetapost:220919' :
+        'genomicmedicinesweden/gmsmetapost:latest' }"
 
-    // WHAT IS THE DIFFERENCE BETWEEN path(tsv) and path(*tsv)
+
     input:
     tuple val(meta), path(tsv)
 
@@ -19,20 +18,24 @@ process PLOT_COVERAGE {
     """
     #!/usr/bin/env Rscript
 	library(tidyverse)
+    library(hrbrthemes)
 	library(plotly)
-    library(htmlwidgets)
+    library(htmltools)
 
     cov <- as_tibble(read.table(file = "${tsv}")) \
         %>% rename("Position" = V2) \
         %>% rename("Coverage" = V3)
 
     p <- cov %>% select(Position, Coverage) \ 
-        %>% ggplot(aes(Position, Coverage)) \  
-        + geom_line() \ 
-        + ggtitle("${meta.taxon}") 
+        %>% ggplot(aes(Position, Coverage)) + \  
+        geom_area(fill="#69b3a2", alpha=0.5) + \ 
+        geom_line(color="#69b3a2") + \ 
+        + ggtitle("${meta.taxon}") + \ 
+        theme_minimal()
 
-    ggplotly(p)
+    p <- ggplotly(p)
 
-
+    htmltools::save_html(p, "${meta.sample}.${meta.taxid}.html")
 
     """
+}
