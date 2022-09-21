@@ -34,8 +34,10 @@ blastdbcmd \
 -db nt \
 -taxids "${TAXID}" \
 -dbtype nucl > "${FASTA}"
+
 mkdir -p "${BLAST_DB_PATH}"
 cd "${BLAST_DB_PATH}"
+
 makeblastdb \
 -in ../"${FASTA}" \
 -dbtype nucl \
@@ -45,7 +47,19 @@ makeblastdb \
 -logfile makeblastdb_"${TAXID}".log
 ```
 
--hash_index \
+Test retrieving taxid 1511916:
+
+```bash
+CURRENT_DIR=/home/lauri/Desktop/gmsmetapost_dev/our_fork/gmsmetapost/temp/20220907_ci_testing
+
+export BLASTDB=1511916_db
+
+cd "${CURRENT_DIR}"
+blastdbcmd \
+-db 1511916_db \
+-taxids "${TAXID}" \
+-dbtype nucl > "${FASTA}"
+```
 
 ## Obtaining of suitable minimal fastq files
 
@@ -55,7 +69,7 @@ makeblastdb \
 
 ```bash
 FASTQ_FILES_DIR=/home/lauri/Desktop/gmsmetapost_dev/our_fork/gmsmetapost/assets/input/
-CURRENT_DIR=/home/lauri/Desktop/gmsmetapost_dev/our_fork/gmsmetapost/temp/20220907_ci_testing
+
 cd "${CURRENT_DIR}"
 mkdir bwa
 bwa \
