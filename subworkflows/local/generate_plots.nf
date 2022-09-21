@@ -6,7 +6,7 @@
 
 // import modules
 include { SAMTOOLS_DEPTH    } from '../../modules/nf-core/modules/samtools/depth/main'
-//include { PLOT_COVERAGE     } from '../../modules/local/plot_coverage/main'
+include { PLOT_COVERAGE     } from '../../modules/local/plot_coverage/main'
 
 workflow GENERATE_PLOTS {
 
@@ -27,8 +27,11 @@ workflow GENERATE_PLOTS {
 
     ch_sam = SAMTOOLS_DEPTH( ch_input_for_samtools )
 
+    ch_ind_plots = PLOT_COVERAGE( ch_sam.tsv )
+
     emit:
     depth    = ch_sam.tsv
+    plots    = ch_ind_plots.html
  //   versions = ch_versions
 
 }
