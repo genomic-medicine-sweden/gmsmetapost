@@ -68,6 +68,38 @@ def sort_records_by_len(
     return sorted(seq_records, key=lambda rec: len(rec), reverse=True)
 
 
+def pick_longest_sequence(
+    seq_records: list[SeqIO.SeqRecord], completeness_level: str = None
+) -> SeqIO.SeqRecord:
+    """Sort sequence records by length and return the longest sequence
+
+    Args:
+        seq_records (list[SeqIO.SeqRecord]): List of SeqIO.SeqRecords
+        completeness_level (str, optional): The known completeness level of the sequences in the list. Defaults to None.
+
+    Returns:
+        SeqIO.SeqRecord: The longest SeqIO.SeqRecord in the given list
+    """
+    sorted_seq_records: list[SeqIO.SeqRecord] = sort_records_by_len(seq_records)
+    longest_seq_record: SeqIO.SeqRecord = sorted_seq_records[0]
+    logger.info(
+        "Record description: %s\nRecord ID: %s\nRecord length: %s",
+        longest_seq_record.description,
+        longest_seq_record.id,
+        str(len(longest_seq_record)),
+    )
+    if completeness_level:
+        logger.info(
+            "Record completeness level: '%s'",
+            completeness_level,
+        )
+    else:
+        logger.info(
+            "Record completeness level: Unknown.",
+        )
+    return longest_seq_record
+
+
 def main(argv=None):
     """Coordinate argument parsing and program execution."""
     args = parse_args(argv)
@@ -80,14 +112,18 @@ def main(argv=None):
 
     COMPLETENESS_LEVELS: list[str] = [
         "complete genome",
+        "complete sequence",
         "complete cds",
+        "genomic sequence",
         "partial genome",
         "partial cds",
         "allele",
     ]
+
     # Keep track of if a sequence of given completeness was found for logging purposes
     completeness_level_found: bool = False
     # Iterate through the records in the order of descending completeness level
+    # Check if there is any sequences with the given completeness levels
     for completeness_level in COMPLETENESS_LEVELS:
         # Find all records of given completeness level
         if seq_records := [
@@ -96,32 +132,34 @@ def main(argv=None):
             if find_seqs_by_description(seq_record, completeness_level) is not None
         ]:
             completeness_level_found = True
-            sorted_seq_records: list[SeqIO.SeqRecord] = sort_records_by_len(seq_records)
-            longest_seq_record: SeqIO.SeqRecord = sorted_seq_records[0]
-            logger.info(
-                "A record with ID: '%s' and with '%s' completeness level picked.",
-                longest_seq_record.id,
-                completeness_level,
-            )
-            logger.info(
-                "Record description: %s\nRecord ID: %s\nRecord length: %s",
-                longest_seq_record.description,
-                longest_seq_record.id,
-                str(len(longest_seq_record)),
+            longest_seq_record: SeqIO.SeqRecord = pick_longest_sequence(
+                seq_records, completeness_level
             )
             # Write the longest and most complete fasta record into a file
             SeqIO.write(longest_seq_record, args.output_singlefasta, "fasta")
-            break  # Jump out of the for loop when we've found the longest sequence of highest completeness
+            break  # Jump out of the for loop when we've found the longest sequence of the highest completeness
         else:
             logger.warning(
-                "There weren't any records with '%s' completeness level",
+                "There weren't any records with '%s' completeness level in: '%s'",
                 completeness_level,
+                input_multifasta,
             )
+    # If there weren't any sequences with given completeness levels then pick just the longest sequence
     if not completeness_level_found:
-        logger.error(
+        logger.warning(
             "There weren't any records with these '%s' completeness levels",
             ", ".join(COMPLETENESS_LEVELS),
         )
+        if seq_records := list(SeqIO.parse(input_multifasta, "fasta")):
+            longest_seq_record: SeqIO.SeqRecord = pick_longest_sequence(seq_records)
+            # Write the longest and most complete fasta record into a file
+            SeqIO.write(longest_seq_record, args.output_singlefasta, "fasta")
+        else:
+            logger.error(
+                "There weren't any records in the fasta file '%s' completeness levels",
+                input_multifasta,
+            )
+            sys.exit(2)
 
 
 if __name__ == "__main__":
