@@ -80,17 +80,17 @@ index \
 INDEX=`find -L ./ -name "*.amb" | sed 's/.amb//'`
 (bwa mem \
 -v 3 \
--t 92 \
+-t 16 \
 "${INDEX}" \
 "${FASTQ_FILES_DIR}"/pe/SRR12875570_1.fastq.gz "${FASTQ_FILES_DIR}"/pe/SRR12875570_2.fastq.gz > "${TAXID}"_pe.bam) \
 &> "${TAXID}"_bwa_mem.log
 (samtools sort \
--@ 47 \
+-@ 10 \
 -n \
 "${TAXID}"_pe.bam \
 | samtools view \
--f 4 \
---threads 47 \
+-F 4 \
+--threads 10 \
 -o "${TAXID}"_pe_filtered.bam -) \
 &> "${TAXID}"_samtools_sort_view.log
 rm -f "${TAXID}"_pe.bam
@@ -101,21 +101,21 @@ rm -f "${TAXID}"_pe.bam
 ```bash
 cd "${CURRENT_DIR}"
 (minimap2 \
--t 92 \
+-t 16 \
 -d "${TAXID}".mmi \
 "${FASTA}") \
 &> minimap2_index.log
 
 (minimap2 \
--t 92 \
+-t 16 \
 "${TAXID}".mmi \
 "${FASTQ_FILES_DIR}"/se/SRR12875558_1.fastq.gz \
 -L \
 -a \
 | samtools sort \
--@ 47 \
-| samtools view -@ 47 \
---require-flags 4 \
+-@ 10 \
+| samtools view -@ 10 \
+-F 4 \
 -b \
 -h \
 -o "${TAXID}"_se_filtered.bam) \
@@ -146,7 +146,7 @@ The original fastq files were from [ENA](https://www.ebi.ac.uk/ena/browser/view/
 The used commands for subsampling the fastq files to a more suitable size were:
 
 ```bash
-seqtk sample -s100 "${TAXID}"_pe_filtered_1.fastq 0.1 | gzip >"${TAXID}"_pe_filtered_010_1.fastq.gz &
-seqtk sample -s100 "${TAXID}"_pe_filtered_2.fastq 0.1 | gzip > "${TAXID}"_pe_filtered_010_2.fastq.gz &
-seqtk sample -s100 "${TAXID}"_se_filtered_1.fastq 0.01 | gzip > "${TAXID}"_se_filtered_0010_1.fastq.gz
+seqtk sample -s100 "${TAXID}"_pe_filtered_1.fastq 0.01 | gzip >"${TAXID}"_pe_filtered_0010_1.fastq.gz &
+seqtk sample -s100 "${TAXID}"_pe_filtered_2.fastq 0.01 | gzip > "${TAXID}"_pe_filtered_0010_2.fastq.gz &
+seqtk sample -s100 "${TAXID}"_se_filtered_1.fastq 0.5 | gzip > "${TAXID}"_se_filtered_050_1.fastq.gz
 ```
