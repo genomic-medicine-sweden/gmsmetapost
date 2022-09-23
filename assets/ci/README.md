@@ -50,11 +50,8 @@ makeblastdb \
 Test retrieving taxid 1511916:
 
 ```bash
-CURRENT_DIR=/home/lauri/Desktop/gmsmetapost_dev/our_fork/gmsmetapost/temp/20220907_ci_testing
-
 export BLASTDB=1511916_db
 
-cd "${CURRENT_DIR}"
 blastdbcmd \
 -db 1511916_db \
 -taxids "${TAXID}" \
@@ -68,9 +65,8 @@ blastdbcmd \
 #### Paired end reads
 
 ```bash
-FASTQ_FILES_DIR=/home/lauri/Desktop/gmsmetapost_dev/our_fork/gmsmetapost/assets/input/
+FASTQ_FILES_DIR=assets/input/
 
-cd "${CURRENT_DIR}"
 mkdir bwa
 bwa \
 index \
@@ -99,7 +95,6 @@ rm -f "${TAXID}"_pe.bam
 #### Single end reads
 
 ```bash
-cd "${CURRENT_DIR}"
 (minimap2 \
 -t 16 \
 -d "${TAXID}".mmi \
@@ -125,7 +120,6 @@ cd "${CURRENT_DIR}"
 ### Convert bam to fastq file
 
 ```bash
-cd "${CURRENT_DIR}"
 (bedtools bamtofastq \
 -i "${TAXID}"_se_filtered.bam \
 -fq "${TAXID}"_se_filtered_1.fastq) \
