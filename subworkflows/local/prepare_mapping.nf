@@ -70,17 +70,10 @@ workflow PREPARE_MAPPING {
 }
 
 // Function to create path to fastq files corresponding classifier tsv file
-// the function assumes that the classifier tsv file is named e.g.:
-// assets/SRR12875558_se-SRR12875558.tsv or e.g.
-// assets/SRR12875570_pe-SRR12875570.tsv
-def create_path(String accession_id, boolean single_end, String assets_path = "assets/"){
-    def path = ""
-    if (single_end){
-        path = assets_path + accession_id + "_se-" + accession_id + ".tsv"
-    } else {
-        path = assets_path + accession_id + "_pe-" + accession_id + ".tsv"
-    }
-    return file(path)
+// the function takes in the sample name, e.g. SRR12875558_se-SRR12875558
+// and converts it to a file path: assets/SRR12875558_se-SRR12875558.tsv
+def create_path(String sample_name, String assets_path = params.assets){
+    return file(assets_path + "/" + sample_name + ".tsv")
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -90,7 +83,6 @@ def create_fastq_channel(LinkedHashMap row) {
     meta.sample                 = row.sample
     meta.instrument_platform    = row.instrument_platform
 
-    def run_accession = row.run_accession
     def fastq_meta = []
 
     if (meta.instrument_platform == 'OXFORD_NANOPORE') {
@@ -98,7 +90,7 @@ def create_fastq_channel(LinkedHashMap row) {
             exit 1, "ERROR: Please check input samplesheet -> For 'instrument_platform' OXFORD_NANOPORE Read 2 FastQ should be empty!\n${row.fastq_2}"
         }
         meta.pairing = "single_end"
-        meta.path    = create_path(run_accession, true)
+        meta.path    = create_path(row.sample)
         fastq_meta   = [ meta, [ file(row.fastq_1) ] ]
         return fastq_meta
     } else if (meta.instrument_platform == 'ILLUMINA') {
@@ -109,7 +101,7 @@ def create_fastq_channel(LinkedHashMap row) {
                 exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
         }
         meta.pairing = "paired_end"
-        meta.path    = create_path(run_accession, false)
+        meta.path    = create_path(row.sample)
         fastq_meta   = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
         return fastq_meta
     } else {
