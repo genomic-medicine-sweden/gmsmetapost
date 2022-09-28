@@ -3,7 +3,7 @@ process RETRIEVE_SEQS {
 
     conda (params.enable_conda ? "conda-forge::python>=3.9 bioconda::blast=2.13.0 " : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'library://sofstam/gmsmetapost/gmsmetapost:220919' :
+        'library://sofstam/gmsmetapost/gmsmetapost:latest' :
         'genomicmedicinesweden/gmsmetapost:latest' }"
 
     input:
