@@ -16,11 +16,14 @@ process VALIDATE_TAXIDS {
     script:
     """
     blast_retrieve () {
+        DB_FNAME=`find -L ./ -name '*.nhr'`
+        FIRST_FN=`echo \$DB_FNAME | awk '{print \$1;}'`
+        DB=`basename \$FIRST_FN | sed 's/\\..*//'`
         (cd $blastdb
         blastdbcmd \
-        -db nt \
         -taxids \$1 \
         -dbtype nucl \
+        -db \$DB \
         > /dev/null) \
         || echo \$1
     }

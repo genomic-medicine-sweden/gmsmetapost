@@ -1,0 +1,2 @@
+taxon_name	rpm	taxid	taxonomic_rank	classifier	centrifuge_genome_size	centrifuge_num_reads	centrifuge_abundance	kaiju_percent	kraken2_percentage_fragments_covered	kraken2_num_fragments_covered	reads_count	cami_taxid	cami_rank	cami_taxpath	cami_taxpathsn	cami_percentage
+Ungulate tetraparvovirus 3	70062.2	1511916	species	centrifuge	5444	1389.0	0.0				1542

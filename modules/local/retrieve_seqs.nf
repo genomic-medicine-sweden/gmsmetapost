@@ -15,12 +15,18 @@ process RETRIEVE_SEQS {
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """
+    DB_FNAME=`find -L ./ -name '*.nhr'`
+    FIRST_FN=`echo \$DB_FNAME | awk '{print \$1;}'`
+    DB=`basename \$FIRST_FN | sed 's/\\..*//'`
+
     (cd $blastdb
     blastdbcmd \
-    -db nt \
+    -db \$DB \
     -taxids $meta.taxid \
     -dbtype nucl) \
-    > ${meta.taxid}_${meta.sample}.fna
+    > temp.fa
+    pick_a_genome.py temp.fa ${meta.taxid}_${meta.sample}.fna
+    rm temp.fa
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
