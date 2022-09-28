@@ -6,7 +6,7 @@
 
 // import modules
 include { SAMTOOLS_DEPTH    } from '../../modules/nf-core/modules/samtools/depth/main'
-include { PLOT_COVERAGE     } from '../../modules/local/plot_coverage/main'
+include { PLOT_COVERAGE     } from '../../modules/local/plot_coverage'
 
 workflow GENERATE_PLOTS {
 
