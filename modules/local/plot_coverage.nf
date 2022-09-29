@@ -10,34 +10,14 @@ process PLOT_COVERAGE {
     tuple val(meta), path(tsv)
 
     output:
-    tuple val(meta), path('*html'), emit: html
+    tuple val(meta), path('*html'), optional:true, emit: html
  //   path "versions.yml"           , emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """
-    #!/usr/bin/env Rscript
-
-    library(tidyverse)
-    library(hrbrthemes)
-    library(plotly)
-    library(htmltools)
-
-    input_tsv="$tsv"
-
-    cov <- as_tibble(read.table(file = input_tsv)) \
-        %>% rename("Position" = V2) \
-        %>% rename("Coverage" = V3)
-
-    p <- cov %>% select(Position, Coverage) %>% \
-        ggplot(aes(Position, Coverage)) + \
-        geom_area(fill="#69b3a2", alpha=0.5) + \
-        geom_line(color="#69b3a2") + \
-        theme_minimal() + \
-        ggtitle("${meta.taxon}") 
-
-    p <- ggplotly(p)
-
-    htmltools::save_html(p, "${meta.sample}.${meta.taxid}.html")
-    
+    coverage="\$(cat $tsv | cut -f 3 | uniq | sed -n -e 'H;\${x;s/\\n/,/g;s/^,//;p;}')";
+    if [[ "\$coverage" != "0" ]]; \
+        then plot_coverage.r $tsv \"$meta.taxon\" $meta.sample $meta.taxid; \
+    fi
     """
 }
