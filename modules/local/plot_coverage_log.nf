@@ -1,4 +1,4 @@
-process PLOT_COVERAGE {
+process PLOT_COVERAGE_LOG {
     tag "$meta.sample, $meta.taxon"
 
     conda (params.enable_conda ? "conda-forge::r-base conda-forge::r-tidyverse conda-forge::r-plotly conda-forge::r-hrbrthemes conda-forge::r-htmltools" : null)
@@ -11,7 +11,6 @@ process PLOT_COVERAGE {
 
     output:
     tuple val(meta), path('*html'), optional:true, emit: html
-    path "versions.yml"           , emit: versions
 
     script: // This script is bundled with the pipeline, in nf-core/gmsmetapost/bin/
     """
@@ -19,10 +18,5 @@ process PLOT_COVERAGE {
     if [[ "\$coverage" != "0" ]]; \
         then plot_log_coverage.r $tsv \"$meta.taxon\" $meta.sample $meta.taxid; \
     fi
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        r: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
-    END_VERSIONS
     """
 }

@@ -8,18 +8,18 @@ process MERGE_PLOTS {
         'biocontainers/biocontainers:v1.2.0_cv2' }"
 
     input:
-    tuple val(meta), path(html)
+    tuple val(meta), path(htmls)
 
     output:
-    tuple val(meta), path('*html'), emit: html
+    tuple val(meta), path('*.html'), emit: html
 
     script:
     """
-    if [[ "${html.baseName}" == *"log"* ]];
+    if [[ "${htmls.baseName}" == *"log"* ]];
     then 
-        cat $html >> ${meta.sample}.log.html;
+        cat $htmls >> ${meta.sample}.log.html;
     else
-        cat $html >> ${meta.sample}.default.html; 
+        cat $htmls >> ${meta.sample}.default.html; 
     fi
     """
 }
