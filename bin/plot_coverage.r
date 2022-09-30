@@ -40,6 +40,6 @@ p2 <- cov %>%
 
 p2 <- ggplotly(p2)
 
-htmltools::save_html(p2, paste(sample, ".", taxid, ".log.html", sep=""))
+htmltools::save_html(p2, paste(sample, ".", taxid, ".log.html", sep=""), libdir = "lib")
 
     
