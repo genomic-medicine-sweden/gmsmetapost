@@ -22,11 +22,10 @@ p <- cov %>%
     ggplot(aes(Position, Coverage)) + 
     geom_area(fill="#69b3a2", alpha=0.5) + 
     geom_line(color="#69b3a2") + 
+    scale_y_continuous(trans='log10') +
     theme_minimal() + 
     ggtitle(taxon) 
 
 p <- ggplotly(p)
 
-htmltools::save_html(p, paste(sample, ".", taxid, ".default.html", sep=""))
-
-    
+htmltools::save_html(p, paste(sample, ".", taxid, ".log.html", sep=""), libdir = "lib")
