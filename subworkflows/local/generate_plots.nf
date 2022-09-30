@@ -15,10 +15,9 @@ workflow GENERATE_PLOTS {
 
 
     main:
- //   ch_versions = Channel.empty()
+    ch_versions = Channel.empty()
 
- //   ch_versions = ch_versions.mix(SAMTOOLS_DEPTH.out.versions)
-
+    
     ch_input_for_samtools = bwa
                 .map {
                     it ->               // Drop unneeded elements in the tuple
@@ -26,13 +25,17 @@ workflow GENERATE_PLOTS {
                 }
 
     ch_sam = SAMTOOLS_DEPTH( ch_input_for_samtools )
+    ch_versions = ch_versions.mix(SAMTOOLS_DEPTH.out.versions)
 
     ch_ind_plots = PLOT_COVERAGE( ch_sam.tsv )
+    // ch_ind_plots.html.dump(tag: "cov_plots")
+
+    ch_versions = ch_versions.mix(PLOT_COVERAGE.out.versions)
 
     emit:
     depth    = ch_sam.tsv
     plots    = ch_ind_plots.html
- //   versions = ch_versions
+    versions = ch_versions
 
 }
 
