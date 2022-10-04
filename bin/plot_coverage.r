@@ -27,6 +27,6 @@ p <- cov %>%
 
 p <- ggplotly(p)
 
-htmltools::save_html(p, paste(sample, ".", taxid, ".default.html", sep=""))
+htmltools::save_html(p, paste(sample, ".", taxid, ".default.html", sep=""), libdir="lib")
 
     
