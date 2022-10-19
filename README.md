@@ -1,5 +1,19 @@
 # GMSMetaPost
 
+## Overview of the pipeline
+
+#### Please note that this is not the finalized overview of the pipeline and maybe subject to changes.
+GMSMetaPost takes the output files of three classifiers from [taxprofiler](https://github.com/nf-core/taxprofiler) (`kraken2`, `centrifuge`, `kaiju`).
+* Calculates reads per million (RPM) for each classifier.
+* Concatenates the different tsv files from each classifier into one.
+* Filters RPM based on a threshold given by the user.
+* Validate and remove missing taxonomic IDs.
+* Download potential reference genomes from a local BlAST nt database (See below on how to install the local blast db).
+* Coverage plots for potential significant findings.
+
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/91951607/196636116-54c641ab-a855-47cd-89f6-7a091a4e1776.png">
+
+
 ## Prerequisites
 
 ### Metadata files
