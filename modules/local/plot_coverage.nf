@@ -23,6 +23,10 @@ process PLOT_COVERAGE {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
+        tidyverse: \$(Rscript -e "library(tidyverse); cat(as.character(packageVersion('tidyverse')))")
+        hrbrthemes: \$(Rscript -e "library(hrbrthemes); cat(as.character(packageVersion('hrbrthemes')))")
+        plotly: \$(Rscript -e "library(plotly); cat(as.character(packageVersion('plotly')))")
+        htmltools: \$(Rscript -e "library(htmltools); cat(as.character(packageVersion('htmltools')))")
     END_VERSIONS
     """
 }
