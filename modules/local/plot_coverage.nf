@@ -19,7 +19,7 @@ process PLOT_COVERAGE {
     if [[ "\$coverage" != "0" ]]; \
         then plot_coverage.r $tsv \"$meta.taxon\" $meta.sample $meta.taxid; \
     fi
-
+//test
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r: \$(echo \$(R --version 2>&1) | sed 's/^.*R version //; s/ .*\$//')
